@@ -32,15 +32,17 @@ function App(){
         } else {
             await allDone();
         }
-        loadTasks()
+        loadTasks();
     }
 
-    const deleteTaskHandler = (id: number) => {
-        deleteTask(id).then(loadTasks);
+    const deleteTaskHandler = async (id: number) => {
+        await deleteTask(id);
+        loadTasks();
     }
 
-    const doneTaskHandler = (id: number, description: string, isDone: boolean) => {
-        done(id, description, isDone).then(loadTasks)
+    const doneTaskHandler = async (id: number, description: string, isDone: boolean) => {
+        await done(id, description, isDone);
+        loadTasks();
     }
 
     return(
@@ -51,12 +53,12 @@ function App(){
                 return(
                     <div key={index}>
                         {task.description},{task.done? 'true' : 'false'}
-                        <button onClick={(e) => {deleteTaskHandler(task.id)}}>delete</button>
-                        <button onClick={(e) => {doneTaskHandler(task.id, task.description, task.done)}}>Done</button>
+                        <button onClick={() => {deleteTaskHandler(task.id);}}>delete</button>
+                        <button onClick={() => {doneTaskHandler(task.id, task.description, task.done);}}>Done</button>
                     </div>
                 )
             })}
-            <br />
+            {/* <br />
             active tasks: <br />
             {tasks.filter((value: {done: boolean})=> value.done === false).map((task: { id: number ,done: boolean, description: string}, index: number)=>{
                 return(
@@ -75,7 +77,7 @@ function App(){
                         <button onClick={ () => {deleteTask(task.id).then(loadTasks)}}>delete</button>
                         <button onClick={ () => {done(task.id, task.description, task.done).then(loadTasks)}}>Done</button>
                     </div>
-                )})}
+                )})} */}
         </div>
     )
 }
