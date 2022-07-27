@@ -2,10 +2,17 @@ import { useEffect, useState } from 'react'
 import { allDone, allUndone, deleteTask, done, getTasks, postTask } from './api';
 import { validateAllDone } from './models/validates';
 
+export interface TaskProps {
+    id: number,
+    description: string,
+    done: boolean,
+    created_at: string,
+    uptdated_at: string
+}
 
 function App(){
-    const [tasks, setTasks] = useState([]);
-    const [newTask, setNewTask] = useState('');
+    const [tasks, setTasks] = useState<Array<TaskProps>>([]);
+    const [newTask, setNewTask] = useState<string>('');
 
     const loadTasks = () => {
         const data = getTasks();
@@ -58,7 +65,7 @@ function App(){
                     </div>
                 )
             })}
-            {/* <br />
+            <br />
             active tasks: <br />
             {tasks.filter((value: {done: boolean})=> value.done === false).map((task: { id: number ,done: boolean, description: string}, index: number)=>{
                 return(
@@ -74,10 +81,10 @@ function App(){
                 return(
                     <div key={index}>
                         {task.description},{task.done? 'true' : 'false'}
-                        <button onClick={ () => {deleteTask(task.id).then(loadTasks)}}>delete</button>
-                        <button onClick={ () => {done(task.id, task.description, task.done).then(loadTasks)}}>Done</button>
+                        <button onClick={ () => {deleteTask(task.id);}}>delete</button>
+                        <button onClick={ () => {done(task.id, task.description, task.done);}}>Done</button>
                     </div>
-                )})} */}
+                )})}
         </div>
     )
 }

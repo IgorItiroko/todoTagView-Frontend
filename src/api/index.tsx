@@ -11,7 +11,7 @@ export const getTasks: GetTasks = async () => {
     })
     .catch(
         (error) => {
-            console.log(error)
+            alert(error)
         }
     )
     return response!.data
@@ -23,7 +23,7 @@ export const postTask = async (newTask: string) => {
         description: newTask,
     }).catch(
         (error) => {
-            console.log(error)
+            alert(error)
         }
     )
     return
@@ -32,7 +32,7 @@ export const postTask = async (newTask: string) => {
 export const deleteTask = async (id: number) => {
     await axios.delete(apiRoute + `/tasks/${id}`)
     .catch((error) => {
-        console.log(error)
+        alert(error)
     })
     return
 }
@@ -40,7 +40,7 @@ export const deleteTask = async (id: number) => {
 export const allDone = async () => {
     await axios.put(apiRoute + `/checkAll`)
     .catch((error) => {
-        console.log(error)
+        alert(error)
     })
     return
 }
@@ -48,7 +48,7 @@ export const allDone = async () => {
 export const allUndone = async () => {
     await axios.put(apiRoute + `/uncheckAll`)
     .catch((error) => {
-        console.log(error)
+        alert(error)
     })
     return
 }
@@ -59,7 +59,7 @@ export const done = async (id: number, currentDesc: string, done: boolean) => {
         done: !done
     })
     .catch((error) => {
-        console.log(error)
+        alert(error)
     })
     return
 }
