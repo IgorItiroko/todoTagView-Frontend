@@ -1,5 +1,7 @@
+import { Input } from '@chakra-ui/react';
 import { useEffect, useState } from 'react'
 import { getTasks } from './api/apiCalls';
+import ChooseTab from './components/tab';
 import { clearDoneHandler, deleteTaskHandler, doneTaskHandler, handleIfOnClick, handleKeyDown } from './handlers/handlers';
 import { TaskProps, validateAllDone } from './models/validates';
 
@@ -22,39 +24,9 @@ function App() {
 
     return (
         <div>
-            <input type="text" value={newTask} name="newTask" onChange={(event) => { (setNewTask(event.target.value)) }} onKeyDown={(event) => { handleKeyDown(event, newTask, loadTasks, setNewTask) }} />
+            <ChooseTab tasks={tasks} loadTasks={loadTasks}/>
+            <Input size="lg" w="40em" placeholder="Set a new Task!" type="text" value={newTask} name="newTask" onChange={(event) => { (setNewTask(event.target.value)) }} onKeyDown={(event) => { handleKeyDown(event, newTask, loadTasks, setNewTask) }} />
             <button onClick={() => { handleIfOnClick(validateAllDone, tasks, loadTasks) }}>V</button>
-            {tasks.map((task: { id: number, done: boolean, description: string }, index: number) => {
-                return (
-                    <div key={index}>
-                        {task.description},{task.done ? 'true' : 'false'}
-                        <button onClick={() => { deleteTaskHandler(task.id, loadTasks ); }}>delete</button>
-                        <button onClick={() => { doneTaskHandler(task.id, task.description, task.done, loadTasks); }}>Done</button>
-                    </div>
-                )
-            })}
-            <br />
-            active tasks: <br />
-            {tasks.filter((value: { done: boolean }) => value.done === false).map((task: { id: number, done: boolean, description: string }, index: number) => {
-                return (
-                    <div key={index}>
-                        {task.description},{task.done ? 'true' : 'false'}
-                        <button onClick={() => { deleteTaskHandler(task.id,loadTasks); }}>delete</button>
-                        <button onClick={() => { doneTaskHandler(task.id, task.description, task.done, loadTasks); }}>Done</button>
-                    </div>
-                )
-            })}
-            <br />
-            completed tasks: <br />
-            {tasks.filter((value: { done: boolean }) => value.done === true).map((task: { id: number, done: boolean, description: string }, index: number) => {
-                return (
-                    <div key={index}>
-                        {task.description},{task.done ? 'true' : 'false'}
-                        <button onClick={() => { deleteTaskHandler(task.id,loadTasks); }}>delete</button>
-                        <button onClick={() => { doneTaskHandler(task.id, task.description, task.done, loadTasks); }}>Done</button>
-                    </div>
-                )
-            })}
             <button onClick={() => { clearDoneHandler(loadTasks) }}>Clear Done</button>
             Items Left: {taskCounter}
         </div>
