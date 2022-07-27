@@ -12,7 +12,6 @@ function App(){
         data.then(function (result: any){
             setTasks(result)
         })
-        
     }
 
     useEffect(()=>{
@@ -35,6 +34,15 @@ function App(){
         }
         loadTasks()
     }
+
+    const deleteTaskHandler = (id: number) => {
+        deleteTask(id).then(loadTasks);
+    }
+
+    const doneTaskHandler = (id: number, description: string, isDone: boolean) => {
+        done(id, description, isDone).then(loadTasks)
+    }
+
     return(
         <div>
             <input type="text" value={newTask} name="newTask" onChange={(event)=>{(setNewTask(event.target.value))}} onKeyDown={handleKeyDown}/>
@@ -43,8 +51,8 @@ function App(){
                 return(
                     <div key={index}>
                         {task.description},{task.done? 'true' : 'false'}
-                        <button onClick={() => {deleteTask(task.id); loadTasks()}}>delete</button>
-                        <button onClick={() => {done(task.id, task.description, task.done); loadTasks()}}>Done</button>
+                        <button onClick={(e) => {deleteTaskHandler(task.id)}}>delete</button>
+                        <button onClick={(e) => {doneTaskHandler(task.id, task.description, task.done)}}>Done</button>
                     </div>
                 )
             })}
@@ -54,8 +62,8 @@ function App(){
                 return(
                     <div key={index}>
                         {task.description},{task.done? 'true' : 'false'}
-                        <button onClick={() => {deleteTask(task.id); loadTasks()}}>delete</button>
-                        <button onClick={() => {done(task.id, task.description, task.done); loadTasks()}}>Done</button>
+                        <button onClick={() => {deleteTask(task.id).then(loadTasks)}}>delete</button>
+                        <button onClick={() => {done(task.id, task.description, task.done).then(loadTasks)}}>Done</button>
                     </div>
                 )})}
                 <br />
@@ -64,8 +72,8 @@ function App(){
                 return(
                     <div key={index}>
                         {task.description},{task.done? 'true' : 'false'}
-                        <button onClick={() => {deleteTask(task.id); loadTasks()}}>delete</button>
-                        <button onClick={() => {done(task.id, task.description, task.done); loadTasks()}}>Done</button>
+                        <button onClick={ () => {deleteTask(task.id).then(loadTasks)}}>delete</button>
+                        <button onClick={ () => {done(task.id, task.description, task.done).then(loadTasks)}}>Done</button>
                     </div>
                 )})}
         </div>
