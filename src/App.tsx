@@ -1,73 +1,73 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import { allDone, allUndone, deleteTask, done, getTasks, postTask } from './api';
+import { validateAllDone } from './models/validates';
+
 
 function App(){
-    const apiRoute = 'http://localhost:3001/api'
     const [tasks, setTasks] = useState([]);
     const [newTask, setNewTask] = useState('');
 
-    const getTasks = async () => {
-        axios.get(apiRoute + '/tasks')
-            .then(response => setTasks(response.data))
+    const loadTasks = () => {
+        const data = getTasks();
+        data.then(function (result: any){
+            setTasks(result)
+        })
+        
     }
 
     useEffect(()=>{
-        getTasks();
+        loadTasks();
     },[])
-
-    const validateAllDone = () => {
-        let done: boolean = true;
-        tasks.forEach((element: {done: boolean}) => {
-            if(element.done == false)
-                done = false;
-        })
-        return done;
-    }
 
     const handleKeyDown = async (event: {key: string;}) => {
         if(event.key === 'Enter'){
-            axios.post(apiRoute + '/tasks', {
-                done: false,
-                description: newTask,
-            }).then(()=> {getTasks(); setNewTask('')})
+            await postTask(newTask);
+            loadTasks();
+            setNewTask('');
         }
     }
 
-    const deleteTask = async (id: number) => {
-        axios.delete(apiRoute + `/tasks/${id}`)
-            .then(() => {getTasks();})
+    const handleIfOnClick = async () => {
+        if(validateAllDone(tasks)){
+            await allUndone();
+        } else {
+            await allDone();
+        }
+        loadTasks()
     }
-
-    const allDone = async () => {
-        axios.put(apiRoute + `/checkAll`)
-            .then(() => {getTasks();})
-    }
-
-    const allUndone = async () => {
-        axios.put(apiRoute + `/uncheckAll`)
-            .then(() => {getTasks();})
-    }
-
-    const done = async (id: number, currentDesc: string, done: boolean) => {
-        axios.put(apiRoute + `/tasks/${id}`,{
-            description: currentDesc,
-            done: !done
-        }).then(()=>{getTasks();})
-    }
-
     return(
         <div>
             <input type="text" value={newTask} name="newTask" onChange={(event)=>{(setNewTask(event.target.value))}} onKeyDown={handleKeyDown}/>
-            <button onClick={validateAllDone()? allUndone : allDone}>V</button>
+            <button onClick={handleIfOnClick}>V</button>
             {tasks.map((task: { id: number ,done: boolean, description: string}, index: number)=>{
                 return(
                     <div key={index}>
                         {task.description},{task.done? 'true' : 'false'}
-                        <button onClick={() => deleteTask(task.id)}>delete</button>
-                        <button onClick={() => done(task.id, task.description, task.done)}>Done</button>
+                        <button onClick={() => {deleteTask(task.id); loadTasks()}}>delete</button>
+                        <button onClick={() => {done(task.id, task.description, task.done); loadTasks()}}>Done</button>
                     </div>
                 )
             })}
+            <br />
+            active tasks: <br />
+            {tasks.filter((value: {done: boolean})=> value.done === false).map((task: { id: number ,done: boolean, description: string}, index: number)=>{
+                return(
+                    <div key={index}>
+                        {task.description},{task.done? 'true' : 'false'}
+                        <button onClick={() => {deleteTask(task.id); loadTasks()}}>delete</button>
+                        <button onClick={() => {done(task.id, task.description, task.done); loadTasks()}}>Done</button>
+                    </div>
+                )})}
+                <br />
+            completed tasks: <br />
+            {tasks.filter((value: {done: boolean})=> value.done === true).map((task: { id: number ,done: boolean, description: string}, index: number)=>{
+                return(
+                    <div key={index}>
+                        {task.description},{task.done? 'true' : 'false'}
+                        <button onClick={() => {deleteTask(task.id); loadTasks()}}>delete</button>
+                        <button onClick={() => {done(task.id, task.description, task.done); loadTasks()}}>Done</button>
+                    </div>
+                )})}
         </div>
     )
 }

@@ -2,9 +2,11 @@ import axios from 'axios';
 
 const apiRoute = 'http://localhost:3001/api'
 
-export const getTasks = async () => {
-    axios.get(apiRoute + '/tasks')
-        .then(response => {return response.data})
+type GetTasks = () => Promise<any[]>
+
+export const getTasks: GetTasks = async () => {
+    const response = await axios.get(apiRoute + '/tasks')
+    return response.data
 }
 
 export const postTask = async (newTask: string) => {
@@ -12,4 +14,23 @@ export const postTask = async (newTask: string) => {
         done: false,
         description: newTask,
     })
+}
+
+export const deleteTask = async (id: number) => {
+    axios.delete(apiRoute + `/tasks/${id}`)
+}
+
+export const allDone = async () => {
+    axios.put(apiRoute + `/checkAll`)
+}
+
+export const allUndone = async () => {
+    axios.put(apiRoute + `/uncheckAll`)
+}
+
+export const done = async (id: number, currentDesc: string, done: boolean) => {
+    axios.put(apiRoute + `/tasks/${id}`,{
+        description: currentDesc,
+        done: !done
+    });
 }
