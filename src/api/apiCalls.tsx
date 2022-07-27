@@ -37,6 +37,13 @@ export const deleteTask = async (id: number) => {
     return
 }
 
+export const clearDone = async () => {
+    await axios.delete(apiRoute + `/destroyChecked`)
+    .catch((error) => {
+        alert (error)
+    })
+}
+
 export const allDone = async () => {
     await axios.put(apiRoute + `/checkAll`)
     .catch((error) => {

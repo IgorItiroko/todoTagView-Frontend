@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react'
-import { allDone, allUndone, deleteTask, done, getTasks, postTask } from './api';
+import { allDone, allUndone, clearDone, deleteTask, done, getTasks, postTask } from './api/apiCalls';
 import { validateAllDone } from './models/validates';
 
 export interface TaskProps {
     id: number,
     description: string,
-    done: boolean,
-    created_at: string,
-    uptdated_at: string
+    done: boolean
 }
 
 function App(){
     const [tasks, setTasks] = useState<Array<TaskProps>>([]);
     const [newTask, setNewTask] = useState<string>('');
+    const [taskCounter, setTaskCounter] = useState<number>(0)
 
     const loadTasks = () => {
         const data = getTasks();
-        data.then(function (result: any){
-            setTasks(result)
+        data.then((result: TaskProps[])=> {
+            setTasks(result);
+            setTaskCounter(result.filter((value: {done: boolean})=> value.done === false).length)
         })
     }
 
@@ -52,6 +52,11 @@ function App(){
         loadTasks();
     }
 
+    const clearDoneHandler = async () => {
+        await clearDone();
+        loadTasks();
+    }
+
     return(
         <div>
             <input type="text" value={newTask} name="newTask" onChange={(event)=>{(setNewTask(event.target.value))}} onKeyDown={handleKeyDown}/>
@@ -71,8 +76,8 @@ function App(){
                 return(
                     <div key={index}>
                         {task.description},{task.done? 'true' : 'false'}
-                        <button onClick={() => {deleteTask(task.id).then(loadTasks)}}>delete</button>
-                        <button onClick={() => {done(task.id, task.description, task.done).then(loadTasks)}}>Done</button>
+                        <button onClick={() => {deleteTaskHandler(task.id);}}>delete</button>
+                        <button onClick={() => {doneTaskHandler(task.id, task.description, task.done);}}>Done</button>
                     </div>
                 )})}
                 <br />
@@ -81,10 +86,12 @@ function App(){
                 return(
                     <div key={index}>
                         {task.description},{task.done? 'true' : 'false'}
-                        <button onClick={ () => {deleteTask(task.id);}}>delete</button>
-                        <button onClick={ () => {done(task.id, task.description, task.done);}}>Done</button>
+                        <button onClick={() => {deleteTaskHandler(task.id);}}>delete</button>
+                        <button onClick={() => {doneTaskHandler(task.id, task.description, task.done);}}>Done</button>
                     </div>
                 )})}
+                <button onClick={()=> {clearDoneHandler()}}>Clear Done</button>
+                Items Left: {taskCounter}
         </div>
     )
 }
