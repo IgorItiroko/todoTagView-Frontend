@@ -1,97 +1,62 @@
 import { useEffect, useState } from 'react'
-import { allDone, allUndone, clearDone, deleteTask, done, getTasks, postTask } from './api/apiCalls';
-import { validateAllDone } from './models/validates';
+import { getTasks } from './api/apiCalls';
+import { clearDoneHandler, deleteTaskHandler, doneTaskHandler, handleIfOnClick, handleKeyDown } from './handlers/handlers';
+import { TaskProps, validateAllDone } from './models/validates';
 
-export interface TaskProps {
-    id: number,
-    description: string,
-    done: boolean
-}
-
-function App(){
+function App() {
     const [tasks, setTasks] = useState<Array<TaskProps>>([]);
     const [newTask, setNewTask] = useState<string>('');
     const [taskCounter, setTaskCounter] = useState<number>(0)
 
     const loadTasks = () => {
         const data = getTasks();
-        data.then((result: TaskProps[])=> {
+        data.then((result: TaskProps[]) => {
             setTasks(result);
-            setTaskCounter(result.filter((value: {done: boolean})=> value.done === false).length)
+            setTaskCounter(result.filter((value: { done: boolean }) => value.done === false).length)
         })
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         loadTasks();
-    },[])
+    }, [])
 
-    const handleKeyDown = async (event: {key: string;}) => {
-        if(event.key === 'Enter'){
-            await postTask(newTask);
-            loadTasks();
-            setNewTask('');
-        }
-    }
-
-    const handleIfOnClick = async () => {
-        if(validateAllDone(tasks)){
-            await allUndone();
-        } else {
-            await allDone();
-        }
-        loadTasks();
-    }
-
-    const deleteTaskHandler = async (id: number) => {
-        await deleteTask(id);
-        loadTasks();
-    }
-
-    const doneTaskHandler = async (id: number, description: string, isDone: boolean) => {
-        await done(id, description, isDone);
-        loadTasks();
-    }
-
-    const clearDoneHandler = async () => {
-        await clearDone();
-        loadTasks();
-    }
-
-    return(
+    return (
         <div>
-            <input type="text" value={newTask} name="newTask" onChange={(event)=>{(setNewTask(event.target.value))}} onKeyDown={handleKeyDown}/>
-            <button onClick={handleIfOnClick}>V</button>
-            {tasks.map((task: { id: number ,done: boolean, description: string}, index: number)=>{
-                return(
+            <input type="text" value={newTask} name="newTask" onChange={(event) => { (setNewTask(event.target.value)) }} onKeyDown={(event) => { handleKeyDown(event, newTask, loadTasks, setNewTask) }} />
+            <button onClick={() => { handleIfOnClick(validateAllDone, tasks, loadTasks) }}>V</button>
+            {tasks.map((task: { id: number, done: boolean, description: string }, index: number) => {
+                return (
                     <div key={index}>
-                        {task.description},{task.done? 'true' : 'false'}
-                        <button onClick={() => {deleteTaskHandler(task.id);}}>delete</button>
-                        <button onClick={() => {doneTaskHandler(task.id, task.description, task.done);}}>Done</button>
+                        {task.description},{task.done ? 'true' : 'false'}
+                        <button onClick={() => { deleteTaskHandler(task.id, loadTasks ); }}>delete</button>
+                        <button onClick={() => { doneTaskHandler(task.id, task.description, task.done, loadTasks); }}>Done</button>
                     </div>
                 )
             })}
             <br />
             active tasks: <br />
-            {tasks.filter((value: {done: boolean})=> value.done === false).map((task: { id: number ,done: boolean, description: string}, index: number)=>{
-                return(
+            {tasks.filter((value: { done: boolean }) => value.done === false).map((task: { id: number, done: boolean, description: string }, index: number) => {
+                return (
                     <div key={index}>
-                        {task.description},{task.done? 'true' : 'false'}
-                        <button onClick={() => {deleteTaskHandler(task.id);}}>delete</button>
-                        <button onClick={() => {doneTaskHandler(task.id, task.description, task.done);}}>Done</button>
+                        {task.description},{task.done ? 'true' : 'false'}
+                        <button onClick={() => { deleteTaskHandler(task.id,loadTasks); }}>delete</button>
+                        <button onClick={() => { doneTaskHandler(task.id, task.description, task.done, loadTasks); }}>Done</button>
                     </div>
-                )})}
-                <br />
+                )
+            })}
+            <br />
             completed tasks: <br />
-            {tasks.filter((value: {done: boolean})=> value.done === true).map((task: { id: number ,done: boolean, description: string}, index: number)=>{
-                return(
+            {tasks.filter((value: { done: boolean }) => value.done === true).map((task: { id: number, done: boolean, description: string }, index: number) => {
+                return (
                     <div key={index}>
-                        {task.description},{task.done? 'true' : 'false'}
-                        <button onClick={() => {deleteTaskHandler(task.id);}}>delete</button>
-                        <button onClick={() => {doneTaskHandler(task.id, task.description, task.done);}}>Done</button>
+                        {task.description},{task.done ? 'true' : 'false'}
+                        <button onClick={() => { deleteTaskHandler(task.id,loadTasks); }}>delete</button>
+                        <button onClick={() => { doneTaskHandler(task.id, task.description, task.done, loadTasks); }}>Done</button>
                     </div>
-                )})}
-                <button onClick={()=> {clearDoneHandler()}}>Clear Done</button>
-                Items Left: {taskCounter}
+                )
+            })}
+            <button onClick={() => { clearDoneHandler(loadTasks) }}>Clear Done</button>
+            Items Left: {taskCounter}
         </div>
     )
 }

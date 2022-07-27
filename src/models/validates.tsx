@@ -1,4 +1,8 @@
-import { TaskProps } from '../App'
+export interface TaskProps {
+    id: number,
+    description: string,
+    done: boolean
+}
 
 export const validateAllDone = (tasks: TaskProps[]) => {
     let done: boolean = true;
