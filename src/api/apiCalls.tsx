@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { apiFailed } from '../styles/swalAlerts';
+
 
 const apiRoute = 'http://localhost:3001/api'
 
@@ -10,8 +12,8 @@ export const getTasks: GetTasks = async () => {
         return res;
     })
     .catch(
-        (error) => {
-            alert(error)
+        () => {
+            apiFailed.fire();
         }
     )
     return response!.data
@@ -22,8 +24,8 @@ export const postTask = async (newTask: string) => {
         done: false,
         description: newTask,
     }).catch(
-        (error) => {
-            alert(error)
+        () => {
+            apiFailed.fire()
         }
     )
     return
@@ -31,30 +33,30 @@ export const postTask = async (newTask: string) => {
 
 export const deleteTask = async (id: number) => {
     await axios.delete(apiRoute + `/tasks/${id}`)
-    .catch((error) => {
-        alert(error)
+    .catch(() => {
+        apiFailed.fire()
     })
     return
 }
 
 export const clearDone = async () => {
     await axios.delete(apiRoute + `/destroyChecked`)
-    .catch((error) => {
-        alert (error)
+    .catch(() => {
+        alert ()
     })
 }
 
 export const allDone = async () => {
     await axios.put(apiRoute + `/checkAll`)
-    .catch((error) => {
-        alert(error)
+    .catch(() => {
+        apiFailed.fire()
     })
 }
 
 export const allUndone = async () => {
     await axios.put(apiRoute + `/uncheckAll`)
-    .catch((error) => {
-        alert(error)
+    .catch(() => {
+        apiFailed.fire()
     })
 }
 
@@ -63,8 +65,8 @@ export const done = async (id: number, currentDesc: string, done: boolean) => {
         description: currentDesc,
         done: !done
     })
-    .catch((error) => {
-        alert(error)
+    .catch(() => {
+        apiFailed.fire()
     })
 }
 
@@ -73,7 +75,7 @@ export const edit = async (id: number, newDesc: string, done: boolean) => {
         description: newDesc,
         done: done
     })
-    .catch((error) => {
-        alert(error)
+    .catch(() => {
+        apiFailed.fire()
     })
 }

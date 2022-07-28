@@ -3,7 +3,7 @@ import { Flex, IconButton, Input, Spacer, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { deleteTaskHandler, doneTaskHandler, onKeySubmitHandler, submitEditHandler } from "../handlers/handlers";
 import { CardProps } from "../models/interfaces";
-
+import { confirmDelete } from "../styles/swalAlerts";
 
 const TaskCard = ({ task, index, loadTasks }: CardProps) => {
   const [isHovering, setIsHovering] = useState<boolean>(false);
@@ -61,7 +61,13 @@ const TaskCard = ({ task, index, loadTasks }: CardProps) => {
           aria-label="delete"
           size="sm"
           onClick={() => {
-            deleteTaskHandler(task.id, loadTasks);
+            if(!task.done){confirmDelete.fire().then((result) => {
+              if(result.isConfirmed) {
+                deleteTaskHandler(task.id, loadTasks);
+              }
+            })}else {
+              deleteTaskHandler(task.id, loadTasks);
+            }
           }}
           icon={<DeleteIcon />}
           colorScheme="red"
