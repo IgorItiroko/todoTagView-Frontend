@@ -9,7 +9,7 @@ interface TabProps {
 
 const ChooseTab = ({tasks, loadTasks}: TabProps) => {
   return (
-    <Tabs variant="soft-rounded" colorScheme="blue">
+    <Tabs variant="soft-rounded" colorScheme="orange">
       <TabList>
         <Tab>All</Tab>
         <Tab>Active</Tab>
