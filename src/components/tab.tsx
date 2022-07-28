@@ -1,6 +1,7 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import { deleteTaskHandler, doneTaskHandler } from "../handlers/handlers";
 import { TaskProps } from "../models/validates";
+import TaskCard from "./taskCard";
 
 interface TabProps {
     tasks: TaskProps[];
@@ -19,11 +20,7 @@ const ChooseTab = ({tasks, loadTasks}: TabProps) => {
         <TabPanel>
         {tasks.map((task: { id: number, done: boolean, description: string }, index: number) => {
                 return (
-                    <div key={index}>
-                        {task.description},{task.done ? 'true' : 'false'}
-                        <button onClick={() => { deleteTaskHandler(task.id, loadTasks ); }}>delete</button>
-                        <button onClick={() => { doneTaskHandler(task.id, task.description, task.done, loadTasks); }}>Done</button>
-                    </div>
+                    <TaskCard task={task} index={index} loadTasks={loadTasks}/>
                 )
             })}
         </TabPanel>

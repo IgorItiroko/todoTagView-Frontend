@@ -2,9 +2,8 @@ import { CheckIcon } from "@chakra-ui/icons";
 import { IconButton, Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
 import { handleKeyDown } from "../handlers/handlers";
 import { TaskProps, validateAllDone } from "../models/validates";
-
+import { handleIfOnClick } from '../handlers/handlers' 
 interface InputTaskProps {
-    handleIfOnClick: Function,
     newTask: string,
     setNewTask: Function,
     tasks: TaskProps[],
@@ -12,7 +11,6 @@ interface InputTaskProps {
 }
 
 const InputTask = ({
-    handleIfOnClick,
     newTask,
     setNewTask,
     tasks,
