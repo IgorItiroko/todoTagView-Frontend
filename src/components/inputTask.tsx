@@ -1,14 +1,10 @@
 import { CheckIcon } from "@chakra-ui/icons";
 import { IconButton, Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
 import { handleKeyDown } from "../handlers/handlers";
-import { TaskProps, validateAllDone } from "../models/validates";
+import { validateAllDone } from "../models/validates";
 import { handleIfOnClick } from '../handlers/handlers' 
-interface InputTaskProps {
-    newTask: string,
-    setNewTask: Function,
-    tasks: TaskProps[],
-    loadTasks: Function
-}
+import { mainColor } from "../styles/colors";
+import { InputTaskProps } from "../models/interfaces";
 
 const InputTask = ({
     newTask,
@@ -24,7 +20,7 @@ const InputTask = ({
                 variant="link"
                 border="none"
                 size="lg"
-                colorScheme="orange"
+                color={mainColor}
                 aria-label="Call Segun"
                 fontSize="30px"
                 icon={<CheckIcon />}
@@ -37,10 +33,12 @@ const InputTask = ({
             }
             />
             <Input
-            focusBorderColor="orange.100"
+            background="gray.200"
+            focusBorderColor={mainColor}
+            color="gray.700"
             size="lg"
-            w="40em"
-            placeholder="Set a new Task!"
+            width={[200, 400, 800]}
+            placeholder="What needs to be done?"
             type="text"
             pl="3em"
             value={newTask}

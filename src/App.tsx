@@ -1,12 +1,17 @@
 import {
     Divider,
     Flex,
+    Text,
+    Spacer,
+    Kbd,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { getTasks } from "./api/apiCalls";
 import InputTask from "./components/inputTask";
-import Menu from "./components/menu";
-import { TaskProps } from "./models/validates";
+import ChooseTab from "./components/tab";
+import { TaskProps } from "./models/interfaces";
+import { mainColor } from "./styles/colors";
+
 
 function App() {
   const [tasks, setTasks] = useState<Array<TaskProps>>([]);
@@ -21,13 +26,8 @@ function App() {
       setleftTaskCounter(
         result.filter((value: { done: boolean }) => value.done === false).length
       );
-      if (result.length === 0 && hiddenUI === false){
-        setHiddenUI(true);
-        console.log('setted true')
-      } else if(hiddenUI === true){
-        setHiddenUI(false);
-        console.log('setted false')
-      }
+      if (result.length === 0) setHiddenUI(true);
+      else setHiddenUI(false);
     });
   };
 
@@ -36,21 +36,21 @@ function App() {
   }, []);
 
   return (
-    <Flex height="100vh" alignItems="center" justifyContent="center">
-        <Flex direction="column" background="yellow.100" p={12} rounded={6}>
-        <InputTask newTask={newTask} setNewTask={setNewTask} tasks={tasks} loadTasks={loadTasks}/>
-        <Divider hidden = {hiddenUI} mt="1em" mb="1em"/>
-        <Menu hiddenUI={hiddenUI} tasks={tasks} loadTasks={loadTasks} leftTaskCounter={leftTaskCounter}/>
-      {/* <button
-        onClick={() => {
-          clearDoneHandler(loadTasks);
-        }}
-      >
-        Clear Done
-      </button> */}
+    <Flex alignItems="center" justifyContent="center" direction="column" mt="5em">
+        <Spacer />
+        <Flex direction="column" alignItems="center" background={mainColor} p="12" rounded="md" boxShadow="2xl" width={[215, 430, 860]}>
+          <Text fontSize="6xl" bgGradient='linear(to-l, #0E7384, #2F4858)'
+  bgClip='text' fontWeight='extrabold'>Todo List</Text>
+          <InputTask newTask={newTask} setNewTask={setNewTask} tasks={tasks} loadTasks={loadTasks}/>
+          <Divider hidden = {hiddenUI} mt="1em" mb="1em"/>
+          <ChooseTab tasks={tasks} loadTasks={loadTasks} leftTaskCounter={leftTaskCounter}  hiddenUI={hiddenUI}/>
+      </Flex>
+      <Flex direction="column" m="2em" alignItems="center" color="gray.500"> 
+        <span>Press <Kbd>Enter</Kbd> to register a todo</span>
+        <span>Double <Kbd>Click</Kbd> to edit a todo</span>
+        <span>Created By <a href="https://www.linkedin.com/in/igor-shinji-itiroko-a95100222/">I.Itiroko</a></span>
       </Flex>
     </Flex>
   );
 }
-
 export default App;

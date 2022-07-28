@@ -49,7 +49,6 @@ export const allDone = async () => {
     .catch((error) => {
         alert(error)
     })
-    return
 }
 
 export const allUndone = async () => {
@@ -57,7 +56,6 @@ export const allUndone = async () => {
     .catch((error) => {
         alert(error)
     })
-    return
 }
 
 export const done = async (id: number, currentDesc: string, done: boolean) => {
@@ -68,5 +66,14 @@ export const done = async (id: number, currentDesc: string, done: boolean) => {
     .catch((error) => {
         alert(error)
     })
-    return
+}
+
+export const edit = async (id: number, newDesc: string, done: boolean) => {
+    await axios.put(apiRoute + `/tasks/${id}`,{
+        description: newDesc,
+        done: done
+    })
+    .catch((error) => {
+        alert(error)
+    })
 }

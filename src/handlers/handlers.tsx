@@ -1,5 +1,13 @@
-import { allDone, allUndone, clearDone, deleteTask, done, postTask } from "../api/apiCalls";
-import { TaskProps } from "../models/validates";
+import {
+  allDone,
+  allUndone,
+  clearDone,
+  deleteTask,
+  done,
+  edit,
+  postTask,
+} from "../api/apiCalls";
+import { TaskProps } from "../models/interfaces";
 
 export const handleKeyDown = async (
   event: { key: string },
@@ -7,7 +15,7 @@ export const handleKeyDown = async (
   loadTasks: Function,
   setNewTask: Function
 ) => {
-  if (event.key === "Enter" && newTask !== '') {
+  if (event.key === "Enter" && newTask !== "") {
     await postTask(newTask);
     loadTasks();
     setNewTask("");
@@ -27,10 +35,7 @@ export const handleIfOnClick = async (
   loadTasks();
 };
 
-export const deleteTaskHandler = async (
-  id: number,
-  loadTasks: Function
-) => {
+export const deleteTaskHandler = async (id: number, loadTasks: Function) => {
   await deleteTask(id);
   loadTasks();
 };
@@ -46,7 +51,45 @@ export const doneTaskHandler = async (
 };
 
 export const clearDoneHandler = async (loadTasks: Function) => {
-    await clearDone();
-    loadTasks();
-}
+  await clearDone();
+  loadTasks();
+};
 
+export const submitEditHandler = async (
+  id: number,
+  description: string,
+  isDone: boolean,
+  loadTasks: Function,
+  editable: boolean,
+  setEditable: Function
+) => {
+  if (description !== "") {
+    await edit(id, description, isDone);
+    setEditable(!editable);
+    loadTasks();
+  } else {
+    await deleteTask(id);
+    loadTasks();
+  }
+};
+
+export const onKeySubmitHandler = async (
+  event: { key: string },
+  id: number,
+  description: string,
+  isDone: boolean,
+  loadTasks: Function,
+  editable: boolean,
+  setEditable: Function
+) => {
+  if (event.key === "Enter") {
+    if (description !== "") {
+      await edit(id, description, isDone);
+      setEditable(!editable);
+      loadTasks();
+    } else {
+      await deleteTask(id);
+      loadTasks();
+    }
+  }
+};
