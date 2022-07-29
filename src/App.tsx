@@ -38,10 +38,10 @@ function App() {
   return (
     <Flex alignItems="center" justifyContent="center" direction="column" mt="5em">
         <Spacer />
-        <Flex direction="column" alignItems="center" background={mainColor} p="12" rounded="md" boxShadow="2xl" width={[215, 430, 860]}>
-          <Text fontSize="6xl" bgGradient='linear(to-l, #0E7384, #2F4858)'
+        <Flex direction="column" alignItems="center" background={mainColor} p="12" rounded="md" boxShadow="2xl" width={[300, 430, 860]}>
+          <Text fontSize={["2xl","3xl","6xl"]} bgGradient='linear(to-l, #0E7384, #2F4858)'
   bgClip='text' fontWeight='extrabold'>Todo List</Text>
-          <InputTask newTask={newTask} setNewTask={setNewTask} tasks={tasks} loadTasks={loadTasks}/>
+          <InputTask newTask={newTask} setNewTask={setNewTask} tasks={tasks} loadTasks={loadTasks} hiddenUI={hiddenUI}/>
           <Divider hidden = {hiddenUI} mt="1em" mb="1em"/>
           <ChooseTab tasks={tasks} loadTasks={loadTasks} leftTaskCounter={leftTaskCounter}  hiddenUI={hiddenUI}/>
       </Flex>

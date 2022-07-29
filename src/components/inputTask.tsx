@@ -1,5 +1,5 @@
 import { CheckIcon } from "@chakra-ui/icons";
-import { IconButton, Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
+import { IconButton, Input, InputGroup, InputLeftElement, useMediaQuery } from "@chakra-ui/react";
 import { handleKeyDown } from "../handlers/handlers";
 import { validateAllDone } from "../models/validates";
 import { handleIfOnClick } from '../handlers/handlers' 
@@ -10,13 +10,17 @@ const InputTask = ({
     newTask,
     setNewTask,
     tasks,
-    loadTasks
+    loadTasks,
+    hiddenUI
 }: InputTaskProps) => {
+    const [isLargerThan400] = useMediaQuery('(min-width: 400px)')
     return(
         <InputGroup>
             <InputLeftElement
             children={
                 <IconButton
+                display={!isLargerThan400? 'none': 'flex'}
+                hidden={hiddenUI}
                 variant="link"
                 border="none"
                 size="lg"
@@ -36,11 +40,12 @@ const InputTask = ({
             background="gray.200"
             focusBorderColor={mainColor}
             color="gray.700"
-            size="lg"
+            size={isLargerThan400? "lg": "md"}
             width={[200, 400, 800]}
             placeholder="What needs to be done?"
+            fontSize={isLargerThan400? "lg": "sm"}
             type="text"
-            pl="3em"
+            pl={isLargerThan400? "3em": '1em'}
             value={newTask}
             name="newTask"
             onChange={(event) => {

@@ -1,5 +1,5 @@
 import { CheckCircleIcon, DeleteIcon } from "@chakra-ui/icons";
-import { Flex, IconButton, Input, Spacer, Text } from "@chakra-ui/react";
+import { Flex, IconButton, Input, Spacer, Text, useMediaQuery } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { deleteTaskHandler, doneTaskHandler, onKeySubmitHandler, submitEditHandler } from "../handlers/handlers";
 import { CardProps } from "../models/interfaces";
@@ -9,7 +9,7 @@ const TaskCard = ({ task, index, loadTasks }: CardProps) => {
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const [editable, setEditable] = useState<boolean>(false);
   const [newEdited, setNewEdited] = useState<string>('')
-
+  const [isLargerThan400] = useMediaQuery('(min-width: 400px)')
   useEffect(()=>{
     setNewEdited(task.description);
   },[task.description])
@@ -24,8 +24,9 @@ const TaskCard = ({ task, index, loadTasks }: CardProps) => {
       rounded={6}
       background="gray.100"
       p="4"
-      height="50px"
-      mb="15px"
+      height={isLargerThan400? "50px": "40px"}
+      mb={isLargerThan400? "15px": "1em"}
+      width={isLargerThan400? "100%": "240px"}
     >
       <IconButton
         onClick={() => {
@@ -38,7 +39,7 @@ const TaskCard = ({ task, index, loadTasks }: CardProps) => {
         colorScheme="whatsapp"
       />
       {editable? <Input 
-        fontSize="xl"
+        fontSize={isLargerThan400? "lg": "md"}
         value={newEdited}
         width="80%"
         onBlur={() => {submitEditHandler(task.id, newEdited, task.done, loadTasks, editable, setEditable)}}
@@ -47,7 +48,7 @@ const TaskCard = ({ task, index, loadTasks }: CardProps) => {
       }
         autoFocus
       /> : <Text
-        fontSize="xl"
+        fontSize={isLargerThan400? "xl": "md"}
         as={task.done ? "s" : "abbr"}
         color={task.done ? "gray" : "black"}
         pl="1em"

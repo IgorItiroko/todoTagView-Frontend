@@ -21,5 +21,6 @@ export interface InputTaskProps {
     newTask: string,
     setNewTask: Function,
     tasks: TaskProps[],
-    loadTasks: Function
+    loadTasks: Function,
+    hiddenUI: boolean,
 }
