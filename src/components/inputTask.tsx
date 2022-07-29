@@ -1,10 +1,10 @@
 import { CheckIcon } from "@chakra-ui/icons";
 import { IconButton, Input, InputGroup, InputLeftElement, useMediaQuery } from "@chakra-ui/react";
 import { onKeyDownHandler } from "../eventListeners/handlers";
-import { validateAllTasks } from "../models/validates";
+import { validateAllTasks } from "../utils/validation";
 import { checkAllHandler } from '../eventListeners/handlers' 
 import { mainColor } from "../styles/colors";
-import { InputTaskProps } from "../models/interfaces";
+import { InputTaskProps } from "../types/interfaces";
 
 const InputTask = ({
     newTask,

@@ -1,3 +1,9 @@
+export type LoadTaskType = () => void;
+export type SetStringType = (data: string) => void;
+export type SetBooleanType = (data: boolean) => void;
+export type ValidationType = (task: TaskProps[]) => boolean;
+export type GetTasks = () => Promise<[{id: number, description: string, done: boolean}]>
+
 export interface TaskProps {
     id: number,
     description: string,
@@ -7,20 +13,20 @@ export interface TaskProps {
 export interface CardProps {
   task: { id: number; done: boolean; description: string };
   index: number;
-  loadTasks: Function;
+  loadTasks: LoadTaskType;
 }
 
 export interface TabProps {
     tasks: TaskProps[];
-    loadTasks: Function;
+    loadTasks: LoadTaskType;
     leftTaskCounter: number;
     isHidden: boolean;
   }
 
 export interface InputTaskProps {
     newTask: string,
-    setNewTask: Function,
+    setNewTask: SetStringType,
     tasks: TaskProps[],
-    loadTasks: Function,
+    loadTasks: LoadTaskType,
     isHidden: boolean,
 }

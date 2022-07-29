@@ -2,7 +2,7 @@ import { CheckCircleIcon, DeleteIcon } from "@chakra-ui/icons";
 import { Flex, IconButton, Input, Spacer, Text, useMediaQuery } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { deleteTaskHandler, doneTaskHandler, onKeySubmitHandler, submitEditHandler } from "../eventListeners/handlers";
-import { CardProps } from "../models/interfaces";
+import { CardProps } from "../types/interfaces";
 import { mainColor } from "../styles/colors";
 import { confirmDelete } from "../styles/sweetAlerts";
 

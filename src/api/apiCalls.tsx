@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { apiFailed } from '../styles/sweetAlerts';
+import { GetTasks } from '../types/interfaces';
 
 
 const apiRoute = 'http://localhost:3001/api'
-
-type GetTasks = () => Promise<[{id: number, description: string, done: boolean}]>
 
 export const getTasks: GetTasks = async () => {
     const response = await axios.get(apiRoute + '/tasks')

@@ -1,7 +1,7 @@
 import {Button, Flex, Spacer, Tab, TabList, TabPanel, TabPanels, Tabs, Text} from "@chakra-ui/react";
 import { useMediaQuery } from "@chakra-ui/react";
 import {clearDoneHandler} from "../eventListeners/handlers";
-import { TabProps } from "../models/interfaces";
+import { TabProps } from "../types/interfaces";
 import { fontColor } from "../styles/colors";
 import TaskCard from "./taskCard";
 
@@ -38,7 +38,8 @@ const ChooseTab = ({ tasks, loadTasks, leftTaskCounter, isHidden }: TabProps) =>
           <TabPanel> 
             {tasks.map((
                 task: { id: number; done: boolean; description: string },
-                index: number) => {
+                index: number
+                ) => {
                 return (
                   <TaskCard
                     key={index}
@@ -56,7 +57,8 @@ const ChooseTab = ({ tasks, loadTasks, leftTaskCounter, isHidden }: TabProps) =>
               .filter((value: { done: boolean }) => value.done === false)
               .map((
                   task: { id: number; done: boolean; description: string },
-                  index: number) => {
+                  index: number
+                  ) => {
                   return (
                     <TaskCard
                     key={index}

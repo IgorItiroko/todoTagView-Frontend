@@ -7,13 +7,13 @@ import {
   edit,
   postTask,
 } from "../api/apiCalls";
-import { TaskProps } from "../models/interfaces";
+import { LoadTaskType, SetBooleanType, SetStringType, TaskProps, ValidationType } from "../types/interfaces";
 
 export const onKeyDownHandler = async (
   event: { key: string },
   newTask: string,
-  loadTasks: Function,
-  setNewTask: Function
+  loadTasks: LoadTaskType,
+  setNewTask: SetStringType,
 ) => {
   if (event.key === "Enter" && newTask !== "") {
     await postTask(newTask);
@@ -23,9 +23,9 @@ export const onKeyDownHandler = async (
 };
 
 export const checkAllHandler = async (
-  validateAllDone: Function,
+  validateAllDone: ValidationType,
   tasks: TaskProps[],
-  loadTasks: Function
+  loadTasks: LoadTaskType
 ) => {
   if (validateAllDone(tasks)) {
     await allUndone();
@@ -35,7 +35,7 @@ export const checkAllHandler = async (
   loadTasks();
 };
 
-export const deleteTaskHandler = async (id: number, loadTasks: Function) => {
+export const deleteTaskHandler = async (id: number, loadTasks: LoadTaskType) => {
   await deleteTask(id);
   loadTasks();
 };
@@ -44,13 +44,13 @@ export const doneTaskHandler = async (
   id: number,
   description: string,
   isDone: boolean,
-  loadTasks: Function
+  loadTasks: LoadTaskType
 ) => {
   await done(id, description, isDone);
   loadTasks();
 };
 
-export const clearDoneHandler = async (loadTasks: Function) => {
+export const clearDoneHandler = async (loadTasks: LoadTaskType) => {
   await clearDone();
   loadTasks();
 };
@@ -59,9 +59,9 @@ export const submitEditHandler = async (
   id: number,
   description: string,
   isDone: boolean,
-  loadTasks: Function,
+  loadTasks: LoadTaskType,
   editable: boolean,
-  setEditable: Function
+  setEditable: SetBooleanType
 ) => {
   if (description !== "") {
     await edit(id, description, isDone);
@@ -78,9 +78,9 @@ export const onKeySubmitHandler = async (
   id: number,
   description: string,
   isDone: boolean,
-  loadTasks: Function,
+  loadTasks: LoadTaskType,
   editable: boolean,
-  setEditable: Function
+  setEditable: SetBooleanType
 ) => {
   if (event.key === "Enter") {
     if (description !== "") {

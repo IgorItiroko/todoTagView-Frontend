@@ -1,5 +1,4 @@
-import { getTasks } from "../api/apiCalls";
-import { TaskProps } from "./interfaces";
+import { TaskProps } from "../types/interfaces";
 
 export const validateAllTasks = (tasks: TaskProps[]) => {
     let done: boolean = true;

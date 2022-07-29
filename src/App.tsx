@@ -4,7 +4,7 @@ import { getTasks } from "./api/apiCalls";
 import Footer from "./components/footer";
 import InputTask from "./components/inputTask";
 import ChooseTab from "./components/tab";
-import { TaskProps } from "./models/interfaces";
+import { TaskProps } from "./types/interfaces";
 import { mainColor } from "./styles/colors";
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
       else setIsHidden(false);
     });
   };
-
+  
   useEffect(() => {
     loadTasks();
   }, []);
