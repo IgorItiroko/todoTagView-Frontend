@@ -1,17 +1,20 @@
 import { CheckCircleIcon, DeleteIcon } from "@chakra-ui/icons";
 import { Flex, IconButton, Input, Spacer, Text, useMediaQuery } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { deleteTaskHandler, doneTaskHandler, onKeySubmitHandler, submitEditHandler } from "../handlers/handlers";
+import { deleteTaskHandler, doneTaskHandler, onKeySubmitHandler, submitEditHandler } from "../eventListeners/handlers";
 import { CardProps } from "../models/interfaces";
-import { confirmDelete } from "../styles/swalAlerts";
+import { mainColor } from "../styles/colors";
+import { confirmDelete } from "../styles/sweetAlerts";
 
 const TaskCard = ({ task, index, loadTasks }: CardProps) => {
   const [isHovering, setIsHovering] = useState<boolean>(false);
-  const [editable, setEditable] = useState<boolean>(false);
-  const [newEdited, setNewEdited] = useState<string>('')
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+  const [newTaskDescription, setNewTaskDescription] = useState<string>('')
+
   const [isLargerThan400] = useMediaQuery('(min-width: 400px)')
+
   useEffect(()=>{
-    setNewEdited(task.description);
+    setNewTaskDescription(task.description);
   },[task.description])
 
   return (
@@ -22,7 +25,7 @@ const TaskCard = ({ task, index, loadTasks }: CardProps) => {
       alignItems="center"
       key={index}
       rounded={6}
-      background="gray.100"
+      background="gray.200"
       p="4"
       height={isLargerThan400? "50px": "40px"}
       mb={isLargerThan400? "15px": "1em"}
@@ -38,21 +41,22 @@ const TaskCard = ({ task, index, loadTasks }: CardProps) => {
         icon={task.done ? <CheckCircleIcon w={6} h={6} /> : <></>}
         colorScheme="whatsapp"
       />
-      {editable? <Input 
-        fontSize={isLargerThan400? "lg": "md"}
-        value={newEdited}
+      {isEditable? <Input 
+        fontSize={isLargerThan400? "xl": "md"}
+        value={newTaskDescription}
+        focusBorderColor={mainColor}
+        color="gray.700"
         width="80%"
-        onBlur={() => {submitEditHandler(task.id, newEdited, task.done, loadTasks, editable, setEditable)}}
-        onChange={(event)=> {setNewEdited(event.target.value)}}
-        onKeyDown={(event)=> {onKeySubmitHandler(event, task.id, newEdited, task.done, loadTasks, editable, setEditable)}
-      }
+        onBlur={() => {submitEditHandler(task.id, newTaskDescription, task.done, loadTasks, isEditable, setIsEditable)}}
+        onChange={(event)=> {setNewTaskDescription(event.target.value)}}
+        onKeyDown={(event)=> {onKeySubmitHandler(event, task.id, newTaskDescription, task.done, loadTasks, isEditable, setIsEditable)}}
         autoFocus
       /> : <Text
         fontSize={isLargerThan400? "xl": "md"}
         as={task.done ? "s" : "abbr"}
         color={task.done ? "gray" : "black"}
         pl="1em"
-        onDoubleClick={()=> setEditable(!editable)}
+        onDoubleClick={()=> setIsEditable(!isEditable)}
       >
         {task.description}
       </Text>}

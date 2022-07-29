@@ -9,7 +9,7 @@ import {
 } from "../api/apiCalls";
 import { TaskProps } from "../models/interfaces";
 
-export const handleKeyDown = async (
+export const onKeyDownHandler = async (
   event: { key: string },
   newTask: string,
   loadTasks: Function,
@@ -22,7 +22,7 @@ export const handleKeyDown = async (
   }
 };
 
-export const handleIfOnClick = async (
+export const checkAllHandler = async (
   validateAllDone: Function,
   tasks: TaskProps[],
   loadTasks: Function

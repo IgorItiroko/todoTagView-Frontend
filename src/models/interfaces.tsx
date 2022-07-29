@@ -14,7 +14,7 @@ export interface TabProps {
     tasks: TaskProps[];
     loadTasks: Function;
     leftTaskCounter: number;
-    hiddenUI: boolean;
+    isHidden: boolean;
   }
 
 export interface InputTaskProps {
@@ -22,5 +22,5 @@ export interface InputTaskProps {
     setNewTask: Function,
     tasks: TaskProps[],
     loadTasks: Function,
-    hiddenUI: boolean,
+    isHidden: boolean,
 }

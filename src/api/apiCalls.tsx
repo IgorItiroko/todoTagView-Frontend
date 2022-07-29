@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { apiFailed } from '../styles/swalAlerts';
+import { apiFailed } from '../styles/sweetAlerts';
 
 
 const apiRoute = 'http://localhost:3001/api'
@@ -44,6 +44,7 @@ export const clearDone = async () => {
     .catch(() => {
         alert ()
     })
+    return
 }
 
 export const allDone = async () => {
@@ -51,6 +52,7 @@ export const allDone = async () => {
     .catch(() => {
         apiFailed.fire()
     })
+    return
 }
 
 export const allUndone = async () => {
@@ -58,6 +60,7 @@ export const allUndone = async () => {
     .catch(() => {
         apiFailed.fire()
     })
+    return
 }
 
 export const done = async (id: number, currentDesc: string, done: boolean) => {
@@ -68,6 +71,7 @@ export const done = async (id: number, currentDesc: string, done: boolean) => {
     .catch(() => {
         apiFailed.fire()
     })
+    return
 }
 
 export const edit = async (id: number, newDesc: string, done: boolean) => {
@@ -78,4 +82,5 @@ export const edit = async (id: number, newDesc: string, done: boolean) => {
     .catch(() => {
         apiFailed.fire()
     })
+    return
 }

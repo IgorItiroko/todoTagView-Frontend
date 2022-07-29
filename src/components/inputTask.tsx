@@ -1,8 +1,8 @@
 import { CheckIcon } from "@chakra-ui/icons";
 import { IconButton, Input, InputGroup, InputLeftElement, useMediaQuery } from "@chakra-ui/react";
-import { handleKeyDown } from "../handlers/handlers";
-import { validateAllDone } from "../models/validates";
-import { handleIfOnClick } from '../handlers/handlers' 
+import { onKeyDownHandler } from "../eventListeners/handlers";
+import { validateAllTasks } from "../models/validates";
+import { checkAllHandler } from '../eventListeners/handlers' 
 import { mainColor } from "../styles/colors";
 import { InputTaskProps } from "../models/interfaces";
 
@@ -11,7 +11,7 @@ const InputTask = ({
     setNewTask,
     tasks,
     loadTasks,
-    hiddenUI
+    isHidden
 }: InputTaskProps) => {
     const [isLargerThan400] = useMediaQuery('(min-width: 400px)')
     return(
@@ -19,19 +19,18 @@ const InputTask = ({
             <InputLeftElement
             children={
                 <IconButton
+                aria-label="CheckAll"
                 display={!isLargerThan400? 'none': 'flex'}
-                hidden={hiddenUI}
+                hidden={isHidden}
                 variant="link"
-                border="none"
                 size="lg"
                 color={mainColor}
-                aria-label="Call Segun"
                 fontSize="30px"
                 icon={<CheckIcon />}
                 mt="2"
-                ml="1.5"
+                ml="3"
                 onClick={() => {
-                    handleIfOnClick(validateAllDone, tasks, loadTasks);
+                    checkAllHandler(validateAllTasks, tasks, loadTasks);
                   }}
                 />
             }
@@ -52,7 +51,7 @@ const InputTask = ({
                 setNewTask(event.target.value);
             }}
             onKeyDown={(event) => {
-                handleKeyDown(event, newTask, loadTasks, setNewTask);
+                onKeyDownHandler(event, newTask, loadTasks, setNewTask);
             }}
             />
         </InputGroup>

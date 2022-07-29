@@ -1,35 +1,23 @@
-import {
-  Button,
-  Flex,
-  Spacer,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Text,
-} from "@chakra-ui/react";
+import {Button, Flex, Spacer, Tab, TabList, TabPanel, TabPanels, Tabs, Text} from "@chakra-ui/react";
 import { useMediaQuery } from "@chakra-ui/react";
-import {
-  clearDoneHandler
-} from "../handlers/handlers";
+import {clearDoneHandler} from "../eventListeners/handlers";
 import { TabProps } from "../models/interfaces";
 import { fontColor } from "../styles/colors";
 import TaskCard from "./taskCard";
 
 
-const ChooseTab = ({ tasks, loadTasks, leftTaskCounter, hiddenUI }: TabProps) => {
+const ChooseTab = ({ tasks, loadTasks, leftTaskCounter, isHidden }: TabProps) => {
   const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
   return (
-    <Flex direction="row" hidden={hiddenUI} justifyContent="center ">
+    <div hidden={isHidden}>
       <Tabs variant="soft-rounded" colorScheme="gray" >
         <Flex hidden = {!isLargerThan800} justifyContent="flex-start" width="680px">
           <TabList>
-            <Tab color={fontColor}>All</Tab>
-            <Tab color={fontColor}>Active</Tab>
-            <Tab color={fontColor}>Completed</Tab>
+            <Tab>All</Tab>
+            <Tab>Active</Tab>
+            <Tab>Completed</Tab>
           </TabList>
-          <Spacer height="2em" />
+          <Spacer/>
           <Button
             onClick={() => {
               clearDoneHandler(loadTasks);
@@ -41,18 +29,16 @@ const ChooseTab = ({ tasks, loadTasks, leftTaskCounter, hiddenUI }: TabProps) =>
           >
             Clear Completed
           </Button>
-          <Spacer height="2em" />
-          <Text as="u" height="2em" pt="2" size="md" fontWeight="bold "color={fontColor}>
+          <Spacer />
+          <Text as="u" height="2em" pt="2" size="md" fontWeight="bold " color={fontColor}>
             Items Left: {leftTaskCounter}
           </Text>
         </Flex>
         <TabPanels>
-          <TabPanel>
-            {tasks.map(
-              (
+          <TabPanel> 
+            {tasks.map((
                 task: { id: number; done: boolean; description: string },
-                index: number
-              ) => {
+                index: number) => {
                 return (
                   <TaskCard
                     key={index}
@@ -61,18 +47,16 @@ const ChooseTab = ({ tasks, loadTasks, leftTaskCounter, hiddenUI }: TabProps) =>
                     loadTasks={loadTasks}
                   />
                 );
-              }
-            )}
+              })
+            }
           </TabPanel>
 
           <TabPanel>
             {tasks
               .filter((value: { done: boolean }) => value.done === false)
-              .map(
-                (
+              .map((
                   task: { id: number; done: boolean; description: string },
-                  index: number
-                ) => {
+                  index: number) => {
                   return (
                     <TaskCard
                     key={index}
@@ -81,18 +65,16 @@ const ChooseTab = ({ tasks, loadTasks, leftTaskCounter, hiddenUI }: TabProps) =>
                     loadTasks={loadTasks}
                   />
                   );
-                }
-              )}
+                })
+            }
           </TabPanel>
           
           <TabPanel>
             {tasks
               .filter((value: { done: boolean }) => value.done === true)
-              .map(
-                (
+              .map((
                   task: { id: number; done: boolean; description: string },
-                  index: number
-                ) => {
+                  index: number) => {
                   return (
                     <TaskCard
                     key={index}
@@ -101,12 +83,12 @@ const ChooseTab = ({ tasks, loadTasks, leftTaskCounter, hiddenUI }: TabProps) =>
                     loadTasks={loadTasks}
                   />
                   );
-                }
-              )}
+               })
+            }
           </TabPanel>
         </TabPanels>
       </Tabs>
-    </Flex>
+    </div>
   );
 };
 
