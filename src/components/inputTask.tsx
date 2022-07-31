@@ -20,15 +20,15 @@ const InputTask = ({
             children={
                 <IconButton
                 aria-label="CheckAll"
-                display={!isLargerThan400? 'none': 'flex'}
-                hidden={isHidden}
                 variant="link"
                 size="lg"
                 color={mainColor}
                 fontSize="30px"
-                icon={<CheckIcon />}
                 mt="2"
                 ml="3"
+                display={!isLargerThan400? 'none': 'flex'}
+                hidden={isHidden}
+                icon={<CheckIcon />}
                 onClick={() => {
                     checkAllHandler(validateAllTasks, tasks, loadTasks);
                   }}
@@ -45,8 +45,8 @@ const InputTask = ({
             fontSize={isLargerThan400? "lg": "sm"}
             type="text"
             pl={isLargerThan400? "3em": '1em'}
-            value={newTask}
             name="newTask"
+            value={newTask}
             onChange={(event) => {
                 setNewTask(event.target.value);
             }}

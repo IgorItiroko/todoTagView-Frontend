@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { getTasks } from "./api/apiCalls";
 import Footer from "./components/footer";
 import InputTask from "./components/inputTask";
-import ChooseTab from "./components/tab";
+import ChooseTab from "./components/chooseTab";
 import { TaskProps } from "./types/interfaces";
 import { mainColor } from "./styles/colors";
 

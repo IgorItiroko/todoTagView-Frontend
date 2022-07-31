@@ -9,7 +9,7 @@ import { confirmDelete } from "../styles/sweetAlerts";
 const TaskCard = ({ task, index, loadTasks }: CardProps) => {
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
-  const [newTaskDescription, setNewTaskDescription] = useState<string>('')
+  const [newTaskDescription, setNewTaskDescription] = useState<string>("")
 
   const [isLargerThan400] = useMediaQuery('(min-width: 400px)')
 
@@ -27,7 +27,6 @@ const TaskCard = ({ task, index, loadTasks }: CardProps) => {
       rounded={6}
       background="gray.200"
       p="4"
-      height={isLargerThan400? "50px": "40px"}
       mb={isLargerThan400? "15px": "1em"}
       width={isLargerThan400? "100%": "240px"}
     >
@@ -56,6 +55,7 @@ const TaskCard = ({ task, index, loadTasks }: CardProps) => {
         as={task.done ? "s" : "abbr"}
         color={task.done ? "gray" : "black"}
         pl="1em"
+        word-spacing= "<parent-width>"
         onDoubleClick={()=> setIsEditable(!isEditable)}
       >
         {task.description}

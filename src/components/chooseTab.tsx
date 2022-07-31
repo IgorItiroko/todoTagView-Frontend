@@ -11,7 +11,7 @@ const ChooseTab = ({ tasks, loadTasks, leftTaskCounter, isHidden }: TabProps) =>
   return (
     <div hidden={isHidden}>
       <Tabs variant="soft-rounded" colorScheme="gray" >
-        <Flex hidden = {!isLargerThan800} justifyContent="flex-start" width="680px">
+        <Flex justifyContent="flex-start" width="680px" hidden = {!isLargerThan800} >
           <TabList>
             <Tab>All</Tab>
             <Tab>Active</Tab>
