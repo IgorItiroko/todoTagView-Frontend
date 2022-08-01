@@ -7,13 +7,19 @@ import {
   edit,
   postTask,
 } from "../api/apiCalls";
-import { LoadTaskType, SetBooleanType, SetStringType, TaskProps, ValidationType } from "../types/interfaces";
+import {
+  LoadTaskType,
+  SetBooleanType,
+  SetStringType,
+  TaskProps,
+  ValidationType,
+} from "../types/interfaces";
 
-export const onKeyDownHandler = async (
+export const newTaskOnEnterDown = async (
   event: { key: string },
   newTask: string,
   loadTasks: LoadTaskType,
-  setNewTask: SetStringType,
+  setNewTask: SetStringType
 ) => {
   if (event.key === "Enter" && newTask !== "") {
     await postTask(newTask);
@@ -35,7 +41,10 @@ export const checkAllHandler = async (
   loadTasks();
 };
 
-export const deleteTaskHandler = async (id: number, loadTasks: LoadTaskType) => {
+export const deleteTaskHandler = async (
+  id: number,
+  loadTasks: LoadTaskType
+) => {
   await deleteTask(id);
   loadTasks();
 };
@@ -73,7 +82,7 @@ export const submitEditHandler = async (
   }
 };
 
-export const onKeySubmitHandler = async (
+export const submitTaskOnKeyDownHandler = async (
   event: { key: string },
   id: number,
   description: string,

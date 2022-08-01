@@ -9,9 +9,9 @@ import { mainColor } from "./styles/colors";
 
 function App() {
   const [tasks, setTasks] = useState<Array<TaskProps>>([]);
-  const [newTask, setNewTask] = useState<string>("");
-  const [leftTaskCounter, setLeftTaskCounter] = useState<number>(0);
-  const [isHidden, setIsHidden] = useState<boolean>(true);
+  const [newTask, setNewTask] = useState("");
+  const [leftTaskCounter, setLeftTaskCounter] = useState(0);
+  const [isHidden, setIsHidden] = useState(true);
 
   const loadTasks = () => {
     const data = getTasks();
@@ -24,19 +24,45 @@ function App() {
       else setIsHidden(false);
     });
   };
-  
+
   useEffect(() => {
     loadTasks();
   }, []);
 
   return (
-    // Responsive breakpoints : defined by screen width [0-30 em, 30em-48em, 48em+] 
+    // Responsive breakpoints : defined by screen width [0-30 em, 30em-48em, 48em+]
     <Flex alignItems="center" direction="column" mt="5em">
-        <Flex direction="column" alignItems="center" background={mainColor} p="12" rounded="md" boxShadow="2xl" width={[300, 430, 860]}>
-          <Text fontSize={["2xl","3xl","6xl"]} bgGradient="linear(to-l, #0E7384, #2F4858)" bgClip='text' fontWeight='extrabold'>Todo List</Text>
-          <InputTask newTask={newTask} setNewTask={setNewTask} tasks={tasks} loadTasks={loadTasks} isHidden={isHidden}/>
-          <Divider hidden = {isHidden} mt="1em" mb="1em"/>
-          <ChooseTab tasks={tasks} loadTasks={loadTasks} leftTaskCounter={leftTaskCounter}  isHidden={isHidden}/>
+      <Flex
+        direction="column"
+        alignItems="center"
+        background={mainColor}
+        p="12"
+        rounded="md"
+        boxShadow="2xl"
+        width={[300, 430, 860]}
+      >
+        <Text
+          fontSize={["2xl", "3xl", "6xl"]}
+          bgGradient="linear(to-l, #0E7384, #2F4858)"
+          bgClip="text"
+          fontWeight="extrabold"
+        >
+          Todo List
+        </Text>
+        <InputTask
+          newTask={newTask}
+          setNewTask={setNewTask}
+          tasks={tasks}
+          loadTasks={loadTasks}
+          isHidden={isHidden}
+        />
+        <Divider hidden={isHidden} mt="1em" mb="1em" />
+        <ChooseTab
+          tasks={tasks}
+          loadTasks={loadTasks}
+          leftTaskCounter={leftTaskCounter}
+          isHidden={isHidden}
+        />
       </Flex>
       <Footer />
     </Flex>
