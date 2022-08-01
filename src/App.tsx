@@ -6,27 +6,16 @@ import InputTask from "./components/inputTask";
 import ChooseTab from "./components/chooseTab";
 import { TaskProps } from "./types/interfaces";
 import { mainColor } from "./styles/colors";
+import { isTasksEmpty } from "./utils/reusableFunctions";
 
 function App() {
   const [tasks, setTasks] = useState<Array<TaskProps>>([]);
-  const [newTask, setNewTask] = useState("");
-  const [leftTaskCounter, setLeftTaskCounter] = useState(0);
-  const [isHidden, setIsHidden] = useState(true);
 
-  const loadTasks = () => {
+  useEffect(() => {
     const data = getTasks();
     data.then((result: TaskProps[]) => {
       setTasks(result);
-      setLeftTaskCounter(
-        result.filter((value: { done: boolean }) => value.done === false).length
-      );
-      if (result.length === 0) setIsHidden(true);
-      else setIsHidden(false);
     });
-  };
-
-  useEffect(() => {
-    loadTasks();
   }, []);
 
   return (
@@ -49,20 +38,9 @@ function App() {
         >
           Todo List
         </Text>
-        <InputTask
-          newTask={newTask}
-          setNewTask={setNewTask}
-          tasks={tasks}
-          loadTasks={loadTasks}
-          isHidden={isHidden}
-        />
-        <Divider hidden={isHidden} mt="1em" mb="1em" />
-        <ChooseTab
-          tasks={tasks}
-          loadTasks={loadTasks}
-          leftTaskCounter={leftTaskCounter}
-          isHidden={isHidden}
-        />
+        <InputTask tasks={tasks} setTasks={setTasks} />
+        <Divider hidden={isTasksEmpty(tasks)} mt="1em" mb="1em" />
+        <ChooseTab tasks={tasks} setTasks={setTasks} />
       </Flex>
       <Footer />
     </Flex>

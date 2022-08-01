@@ -15,14 +15,14 @@ export const getTasks: GetTasks = async () => {
 
 export const postTask = async (newTask: string) => {
   try {
-    await axios.post(apiRoute + "/tasks", {
+    const response = await axios.post(apiRoute + "/tasks", {
       done: false,
       description: newTask,
     });
+    return response!.data;
   } catch (e) {
     apiFailed.fire();
   }
-  return;
 };
 
 export const deleteTask = async (id: number) => {

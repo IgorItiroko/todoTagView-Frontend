@@ -18,7 +18,7 @@ import { CardProps } from "../types/interfaces";
 import { mainColor } from "../styles/colors";
 import { confirmDelete } from "../styles/sweetAlerts";
 
-const TaskCard = ({ task, index, loadTasks }: CardProps) => {
+const TaskCard = ({ tasks, task, index, setTasks }: CardProps) => {
   const [isHovering, setIsHovering] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
   const [newTaskDescription, setNewTaskDescription] = useState("");
@@ -27,7 +27,7 @@ const TaskCard = ({ task, index, loadTasks }: CardProps) => {
 
   useEffect(() => {
     setNewTaskDescription(task.description);
-  }, [task.description]);
+  }, []);
 
   return (
     <Flex
@@ -44,7 +44,13 @@ const TaskCard = ({ task, index, loadTasks }: CardProps) => {
     >
       <IconButton
         onClick={() => {
-          doneTaskHandler(task.id, task.description, task.done, loadTasks);
+          doneTaskHandler(
+            task.id,
+            task.description,
+            task.done,
+            tasks,
+            setTasks
+          );
         }}
         aria-label="checkbox"
         size="sm"
@@ -64,7 +70,8 @@ const TaskCard = ({ task, index, loadTasks }: CardProps) => {
               task.id,
               newTaskDescription,
               task.done,
-              loadTasks,
+              tasks,
+              setTasks,
               isEditable,
               setIsEditable
             );
@@ -78,7 +85,8 @@ const TaskCard = ({ task, index, loadTasks }: CardProps) => {
               task.id,
               newTaskDescription,
               task.done,
-              loadTasks,
+              tasks,
+              setTasks,
               isEditable,
               setIsEditable
             );
@@ -105,11 +113,11 @@ const TaskCard = ({ task, index, loadTasks }: CardProps) => {
             if (!task.done) {
               confirmDelete.fire().then((result) => {
                 if (result.isConfirmed) {
-                  deleteTaskHandler(task.id, loadTasks);
+                  deleteTaskHandler(task.id, tasks, setTasks);
                 }
               });
             } else {
-              deleteTaskHandler(task.id, loadTasks);
+              deleteTaskHandler(task.id, tasks, setTasks);
             }
           }}
           icon={<DeleteIcon />}

@@ -7,98 +7,159 @@ import {
   edit,
   postTask,
 } from "../api/apiCalls";
+import { apiFailed } from "../styles/sweetAlerts";
 import {
-  LoadTaskType,
   SetBooleanType,
   SetStringType,
   TaskProps,
-  ValidationType,
+  SetTaskArrayType,
 } from "../types/interfaces";
+import { validateAllTasks } from "../utils/reusableFunctions";
 
 export const newTaskOnEnterDown = async (
   event: { key: string },
   newTask: string,
-  loadTasks: LoadTaskType,
+  tasks: TaskProps[],
+  setTasks: SetTaskArrayType,
   setNewTask: SetStringType
 ) => {
-  if (event.key === "Enter" && newTask !== "") {
-    await postTask(newTask);
-    loadTasks();
-    setNewTask("");
+  try {
+    if (event.key === "Enter" && newTask !== "") {
+      const response = await postTask(newTask);
+      setTasks(tasks.concat(response));
+      setNewTask("");
+    }
+  } catch (e) {
+    apiFailed.fire();
   }
 };
 
 export const checkAllHandler = async (
-  validateAllDone: ValidationType,
   tasks: TaskProps[],
-  loadTasks: LoadTaskType
+  setTasks: SetTaskArrayType
 ) => {
-  if (validateAllDone(tasks)) {
-    await allUndone();
-  } else {
-    await allDone();
+  try {
+    const isAllDone = validateAllTasks(tasks);
+    if (isAllDone) {
+      await allUndone();
+    } else {
+      await allDone();
+    }
+    setTasks(tasks.map((task: TaskProps) => ({ ...task, done: !isAllDone })));
+  } catch (e) {
+    apiFailed.fire();
   }
-  loadTasks();
 };
 
 export const deleteTaskHandler = async (
   id: number,
-  loadTasks: LoadTaskType
+  tasks: TaskProps[],
+  setTasks: SetTaskArrayType
 ) => {
-  await deleteTask(id);
-  loadTasks();
+  try {
+    await deleteTask(id);
+    setTasks(tasks.filter((value: { id: number }) => value.id !== id));
+  } catch (e) {
+    apiFailed.fire();
+  }
 };
 
 export const doneTaskHandler = async (
   id: number,
   description: string,
   isDone: boolean,
-  loadTasks: LoadTaskType
+  tasks: TaskProps[],
+  setTasks: SetTaskArrayType
 ) => {
-  await done(id, description, isDone);
-  loadTasks();
+  try {
+    await done(id, description, isDone);
+    setTasks(
+      tasks.map((task: TaskProps) => {
+        if (task.id === id) {
+          return { ...task, done: !isDone };
+        } else {
+          return task;
+        }
+      })
+    );
+  } catch (e) {
+    apiFailed.fire();
+  }
 };
 
-export const clearDoneHandler = async (loadTasks: LoadTaskType) => {
-  await clearDone();
-  loadTasks();
+export const clearDoneHandler = async (
+  tasks: TaskProps[],
+  setTasks: SetTaskArrayType
+) => {
+  try {
+    await clearDone();
+    setTasks(tasks.filter((value: { done: boolean }) => !value.done));
+  } catch (e) {
+    apiFailed.fire();
+  }
 };
 
 export const submitEditHandler = async (
   id: number,
-  description: string,
+  newDescription: string,
   isDone: boolean,
-  loadTasks: LoadTaskType,
+  tasks: TaskProps[],
+  setTasks: SetTaskArrayType,
   editable: boolean,
   setEditable: SetBooleanType
 ) => {
-  if (description !== "") {
-    await edit(id, description, isDone);
-    setEditable(!editable);
-    loadTasks();
-  } else {
-    await deleteTask(id);
-    loadTasks();
+  try {
+    if (newDescription !== "") {
+      await edit(id, newDescription, isDone);
+      setEditable(!editable);
+      setTasks(
+        tasks.map((task: TaskProps) => {
+          if (task.id === id) {
+            return { ...task, description: newDescription };
+          } else {
+            return task;
+          }
+        })
+      );
+    } else {
+      await deleteTask(id);
+      setTasks(tasks.filter((value: { id: number }) => value.id !== id));
+    }
+  } catch (e) {
+    apiFailed.fire();
   }
 };
 
 export const submitTaskOnKeyDownHandler = async (
   event: { key: string },
   id: number,
-  description: string,
+  newDescription: string,
   isDone: boolean,
-  loadTasks: LoadTaskType,
+  tasks: TaskProps[],
+  setTasks: SetTaskArrayType,
   editable: boolean,
   setEditable: SetBooleanType
 ) => {
-  if (event.key === "Enter") {
-    if (description !== "") {
-      await edit(id, description, isDone);
-      setEditable(!editable);
-      loadTasks();
-    } else {
-      await deleteTask(id);
-      loadTasks();
+  try {
+    if (event.key === "Enter") {
+      if (newDescription !== "") {
+        await edit(id, newDescription, isDone);
+        setEditable(!editable);
+        setTasks(
+          tasks.map((task: TaskProps) => {
+            if (task.id === id) {
+              return { ...task, description: newDescription };
+            } else {
+              return task;
+            }
+          })
+        );
+      } else {
+        await deleteTask(id);
+        setTasks(tasks.filter((value: { id: number }) => value.id !== id));
+      }
     }
+  } catch (e) {
+    apiFailed.fire();
   }
 };
