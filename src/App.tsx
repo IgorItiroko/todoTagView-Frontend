@@ -6,7 +6,7 @@ import InputTask from "./components/inputTask";
 import ChooseTab from "./components/chooseTab";
 import { TaskProps } from "./types/interfaces";
 import { mainColor } from "./styles/colors";
-import { isTasksEmpty } from "./utils/reusableFunctions";
+import { isTaskListEmpty } from "./utils/reusableFunctions";
 
 function App() {
   const [tasks, setTasks] = useState<Array<TaskProps>>([]);
@@ -39,7 +39,7 @@ function App() {
           Todo List
         </Text>
         <InputTask tasks={tasks} setTasks={setTasks} />
-        <Divider hidden={isTasksEmpty(tasks)} mt="1em" mb="1em" />
+        <Divider hidden={isTaskListEmpty(tasks)} mt="1em" mb="1em" />
         <ChooseTab tasks={tasks} setTasks={setTasks} />
       </Flex>
       <Footer />

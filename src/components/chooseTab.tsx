@@ -14,7 +14,7 @@ import { clearDoneHandler } from "../eventListeners/handlers";
 import { TabProps, TaskProps } from "../types/interfaces";
 import { fontColor } from "../styles/colors";
 import TaskCard from "./taskCard";
-import { isTasksEmpty, leftTasks } from "../utils/reusableFunctions";
+import { isTaskListEmpty, leftTasks } from "../utils/reusableFunctions";
 
 const ChooseTab = ({ tasks, setTasks }: TabProps) => {
   const [isLargerThan800] = useMediaQuery("(min-width: 800px)");
@@ -22,7 +22,7 @@ const ChooseTab = ({ tasks, setTasks }: TabProps) => {
     <Tabs
       variant="soft-rounded"
       colorScheme="gray"
-      hidden={isTasksEmpty(tasks)}
+      hidden={isTaskListEmpty(tasks)}
     >
       <Flex justifyContent="flex-start" width="680px" hidden={!isLargerThan800}>
         <TabList>
@@ -76,7 +76,7 @@ const ChooseTab = ({ tasks, setTasks }: TabProps) => {
 
         <TabPanel>
           {tasks
-            .filter((value: { done: boolean }) => value.done === false)
+            .filter((value: { done: boolean }) => !value.done)
             .map((task: TaskProps, index: number) => {
               return (
                 <TaskCard
@@ -92,7 +92,7 @@ const ChooseTab = ({ tasks, setTasks }: TabProps) => {
 
         <TabPanel>
           {tasks
-            .filter((value: { done: boolean }) => value.done === true)
+            .filter((value: { done: boolean }) => value.done)
             .map(
               (
                 task: { id: number; done: boolean; description: string },
