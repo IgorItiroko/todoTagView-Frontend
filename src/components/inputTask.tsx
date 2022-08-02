@@ -11,7 +11,7 @@ import { newTaskOnEnterDown } from "../eventListeners/handlers";
 import { checkAllHandler } from "../eventListeners/handlers";
 import { mainColor } from "../styles/colors";
 import { InputTaskProps } from "../types/interfaces";
-import { isTasksEmpty } from "../utils/reusableFunctions";
+import { isTaskListEmpty } from "../utils/reusableFunctions";
 
 const InputTask = ({ tasks, setTasks }: InputTaskProps) => {
   const [newTask, setNewTask] = useState("");
@@ -29,7 +29,7 @@ const InputTask = ({ tasks, setTasks }: InputTaskProps) => {
             mt="2"
             ml="3"
             display={!isLargerThan400 ? "none" : "flex"}
-            hidden={isTasksEmpty(tasks)}
+            hidden={isTaskListEmpty(tasks)}
             icon={<CheckIcon />}
             onClick={() => {
               checkAllHandler(tasks, setTasks);

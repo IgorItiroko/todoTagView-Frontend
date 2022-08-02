@@ -66,13 +66,12 @@ export const deleteTaskHandler = async (
 
 export const doneTaskHandler = async (
   id: number,
-  description: string,
   isDone: boolean,
   tasks: TaskProps[],
   setTasks: SetTaskArrayType
 ) => {
   try {
-    await done(id, description, isDone);
+    await done(id, isDone);
     setTasks(
       tasks.map((task: TaskProps) => {
         if (task.id === id) {
@@ -99,10 +98,9 @@ export const clearDoneHandler = async (
   }
 };
 
-export const submitEditHandler = async (
+export const submitEditOnBlurHandler = async (
   id: number,
   newDescription: string,
-  isDone: boolean,
   tasks: TaskProps[],
   setTasks: SetTaskArrayType,
   editable: boolean,
@@ -110,7 +108,7 @@ export const submitEditHandler = async (
 ) => {
   try {
     if (newDescription !== "") {
-      await edit(id, newDescription, isDone);
+      await edit(id, newDescription);
       setEditable(!editable);
       setTasks(
         tasks.map((task: TaskProps) => {
@@ -134,7 +132,6 @@ export const submitTaskOnKeyDownHandler = async (
   event: { key: string },
   id: number,
   newDescription: string,
-  isDone: boolean,
   tasks: TaskProps[],
   setTasks: SetTaskArrayType,
   editable: boolean,
@@ -143,7 +140,7 @@ export const submitTaskOnKeyDownHandler = async (
   try {
     if (event.key === "Enter") {
       if (newDescription !== "") {
-        await edit(id, newDescription, isDone);
+        await edit(id, newDescription);
         setEditable(!editable);
         setTasks(
           tasks.map((task: TaskProps) => {

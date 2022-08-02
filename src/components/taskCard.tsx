@@ -12,7 +12,7 @@ import {
   deleteTaskHandler,
   doneTaskHandler,
   submitTaskOnKeyDownHandler,
-  submitEditHandler,
+  submitEditOnBlurHandler,
 } from "../eventListeners/handlers";
 import { CardProps } from "../types/interfaces";
 import { mainColor } from "../styles/colors";
@@ -44,13 +44,7 @@ const TaskCard = ({ tasks, task, index, setTasks }: CardProps) => {
     >
       <IconButton
         onClick={() => {
-          doneTaskHandler(
-            task.id,
-            task.description,
-            task.done,
-            tasks,
-            setTasks
-          );
+          doneTaskHandler(task.id, task.done, tasks, setTasks);
         }}
         aria-label="checkbox"
         size="sm"
@@ -66,10 +60,9 @@ const TaskCard = ({ tasks, task, index, setTasks }: CardProps) => {
           color="gray.700"
           width="80%"
           onBlur={() => {
-            submitEditHandler(
+            submitEditOnBlurHandler(
               task.id,
               newTaskDescription,
-              task.done,
               tasks,
               setTasks,
               isEditable,
@@ -84,7 +77,6 @@ const TaskCard = ({ tasks, task, index, setTasks }: CardProps) => {
               event,
               task.id,
               newTaskDescription,
-              task.done,
               tasks,
               setTasks,
               isEditable,

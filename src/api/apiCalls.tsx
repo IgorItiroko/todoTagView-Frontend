@@ -61,10 +61,9 @@ export const allUndone = async () => {
   return;
 };
 
-export const done = async (id: number, currentDesc: string, done: boolean) => {
+export const done = async (id: number, done: boolean) => {
   try {
     await axios.put(apiRoute + `/tasks/${id}`, {
-      description: currentDesc,
       done: !done,
     });
   } catch (e) {
@@ -73,11 +72,10 @@ export const done = async (id: number, currentDesc: string, done: boolean) => {
   return;
 };
 
-export const edit = async (id: number, newDesc: string, done: boolean) => {
+export const edit = async (id: number, newDesc: string) => {
   try {
     await axios.put(apiRoute + `/tasks/${id}`, {
       description: newDesc,
-      done: done,
     });
   } catch (e) {
     apiFailed.fire();
