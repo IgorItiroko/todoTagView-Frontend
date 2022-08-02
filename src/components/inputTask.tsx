@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { newTaskOnEnterDown } from "../eventListeners/handlers";
-import { checkAllHandler } from "../eventListeners/handlers";
+import { checkAllTasksHandler } from "../eventListeners/handlers";
 import { mainColor } from "../styles/colors";
 import { InputTaskProps } from "../types/interfaces";
 import { isTaskListEmpty } from "../utils/reusableFunctions";
@@ -32,7 +32,7 @@ const InputTask = ({ tasks, setTasks }: InputTaskProps) => {
             hidden={isTaskListEmpty(tasks)}
             icon={<CheckIcon />}
             onClick={() => {
-              checkAllHandler(tasks, setTasks);
+              checkAllTasksHandler(tasks, setTasks);
             }}
           />
         }

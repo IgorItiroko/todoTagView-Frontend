@@ -34,7 +34,7 @@ export const newTaskOnEnterDown = async (
   }
 };
 
-export const checkAllHandler = async (
+export const checkAllTasksHandler = async (
   tasks: TaskProps[],
   setTasks: SetTaskArrayType
 ) => {
