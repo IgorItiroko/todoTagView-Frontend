@@ -7,7 +7,7 @@ const apiRoute = "http://localhost:3001/api";
 export const getTasks: GetTasks = async () => {
   try {
     const response = await axios.get(apiRoute + "/tasks");
-    return response!.data;
+    return response.data;
   } catch (e) {
     apiFailed.fire();
   }
@@ -19,7 +19,7 @@ export const postTask = async (newTask: string) => {
       done: false,
       description: newTask,
     });
-    return response!.data;
+    return response.data;
   } catch (e) {
     apiFailed.fire();
   }
