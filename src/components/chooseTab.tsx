@@ -13,7 +13,7 @@ import { useMediaQuery } from "@chakra-ui/react";
 import { TabProps, TaskProps } from "../types/interfaces";
 import { fontColor } from "../styles/colors";
 import TaskCard from "./taskCard";
-import { isTaskListEmpty, leftTasks } from "../utils/reusableFunctions";
+import { leftTasks } from "../utils/reusableFunctions";
 
 const ChooseTab = ({
   clearDoneHandler,
@@ -27,7 +27,7 @@ const ChooseTab = ({
     <Tabs
       variant="soft-rounded"
       colorScheme="gray"
-      hidden={isTaskListEmpty(tasks)}
+      hidden={tasks.length === 0 ? true : false}
     >
       <Flex
         justifyContent="flex-start"

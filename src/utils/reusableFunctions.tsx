@@ -8,13 +8,6 @@ export const validateAllTasks = (tasks: TaskProps[]) => {
   return done;
 };
 
-export const isTaskListEmpty = (tasks: TaskProps[]): boolean => {
-  if (tasks.length === 0) {
-    return true;
-  }
-  return false;
-};
-
 export const leftTasks = (tasks: TaskProps[]): number => {
   return tasks.filter((value: { done: boolean }) => !value.done).length;
 };

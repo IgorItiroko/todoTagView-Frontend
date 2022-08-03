@@ -1,39 +1,20 @@
 import {
-  clearDone,
-  deleteTask,
-  toggleDone,
-  updateTaskDescription,
-} from "../api/apiCalls";
-import { apiFailed } from "../styles/sweetAlerts";
-import {
+  FuncAddTaskType,
+  FuncDeleteType,
+  FuncUpdateTasksDescription,
   SetBooleanType,
   SetStringType,
-  TaskProps,
-  SetTaskArrayType,
 } from "../types/interfaces";
 
 export const newTaskOnEnterDown = (
   event: { key: string },
   newTask: string,
   setNewTask: SetStringType,
-  onNewTask: Function
+  onNewTask: FuncAddTaskType
 ) => {
   if (event.key === "Enter" && newTask !== "") {
     onNewTask(newTask);
     setNewTask("");
-  }
-};
-
-export const deleteTaskHandler = async (
-  id: number,
-  tasks: TaskProps[],
-  setTasks: SetTaskArrayType
-) => {
-  try {
-    await deleteTask(id);
-    setTasks(tasks.filter((value: { id: number }) => value.id !== id));
-  } catch (e) {
-    apiFailed.fire();
   }
 };
 
@@ -42,14 +23,12 @@ export const submitEditOnBlurHandler = async (
   newDescription: string,
   editable: boolean,
   setEditable: SetBooleanType,
-  onTaskUpdate: Function,
-  deleteTaskHandler: Function
+  onTaskUpdate: FuncUpdateTasksDescription,
+  deleteTaskHandler: FuncDeleteType
 ) => {
-  if (newDescription !== "") {
-    onTaskUpdate(taskId, newDescription);
-  } else {
-    deleteTaskHandler(taskId);
-  }
+  newDescription !== ""
+    ? onTaskUpdate(taskId, newDescription)
+    : deleteTaskHandler(taskId);
   setEditable(!editable);
 };
 
@@ -59,15 +38,13 @@ export const submitTaskOnKeyDownHandler = async (
   newDescription: string,
   editable: boolean,
   setEditable: SetBooleanType,
-  onTaskUpdate: Function,
-  deleteTaskHandler: Function
+  onTaskUpdate: FuncUpdateTasksDescription,
+  deleteTaskHandler: FuncDeleteType
 ) => {
   if (event.key === "Enter") {
-    if (newDescription !== "") {
-      onTaskUpdate(taskId, newDescription);
-    } else {
-      deleteTaskHandler(taskId);
-    }
+    newDescription !== ""
+      ? onTaskUpdate(taskId, newDescription)
+      : deleteTaskHandler(taskId);
     setEditable(!editable);
   }
 };

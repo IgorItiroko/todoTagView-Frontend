@@ -2,7 +2,7 @@ import axios from "axios";
 import {
   DeleteTaskType,
   GetTasks,
-  PostTaskType,
+  AddTaskType,
   ToggleDoneType,
   UpdateTaskDescriptionType,
 } from "../types/interfaces";
@@ -12,7 +12,7 @@ axios.defaults.baseURL = "http://localhost:3001/api";
 export const getTasks: GetTasks = () =>
   axios.get("/tasks").then((res) => res.data);
 
-export const postTask: PostTaskType = (newTaskDescription: string) =>
+export const postTask: AddTaskType = (newTaskDescription: string) =>
   axios
     .post("/tasks", { description: newTaskDescription })
     .then((res) => res.data);
