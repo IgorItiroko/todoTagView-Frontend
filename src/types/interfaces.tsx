@@ -1,11 +1,18 @@
-export type LoadTaskType = () => void;
 export type SetStringType = (data: string) => void;
-export type SetBooleanType = (data: boolean) => void;
+export type SetBooleanType = (done: boolean) => void;
 export type ValidationType = (task: TaskProps[]) => boolean;
-export type GetTasks = () => Promise<
-  [{ id: number; description: string; done: boolean }]
->;
+export type GetTasks = () => Promise<TaskProps[]>;
 export type SetTaskArrayType = (data: TaskProps[]) => void;
+export type PostTaskType = (taskDescription: string) => Promise<TaskProps>;
+export type DeleteTaskType = (taskId: number) => Promise<boolean>;
+export type ToggleDoneType = (
+  taskId: number,
+  isDone: boolean
+) => Promise<boolean>;
+export type UpdateTaskDescriptionType = (
+  taskId: number,
+  newDescription: string
+) => Promise<boolean>;
 
 export interface TaskProps {
   id: number;
@@ -14,18 +21,23 @@ export interface TaskProps {
 }
 
 export interface CardProps {
-  tasks: TaskProps[];
   task: TaskProps;
   index: number;
-  setTasks: SetTaskArrayType;
+  deleteTaskHandler: Function;
+  onToggleDone: Function;
+  onTaskUpdate: Function;
 }
 
 export interface TabProps {
+  clearDoneHandler: Function;
+  deleteTaskHandler: Function;
+  onToggleDone: Function;
+  onTaskUpdate: Function;
   tasks: TaskProps[];
-  setTasks: SetTaskArrayType;
 }
 
 export interface InputTaskProps {
-  tasks: TaskProps[];
-  setTasks: SetTaskArrayType;
+  isTaskListEmpty: boolean;
+  onButtonCheckAll: Function;
+  onNewTask: Function;
 }

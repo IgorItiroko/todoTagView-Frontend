@@ -1,84 +1,43 @@
 import axios from "axios";
-import { apiFailed } from "../styles/sweetAlerts";
-import { GetTasks } from "../types/interfaces";
+import {
+  DeleteTaskType,
+  GetTasks,
+  PostTaskType,
+  ToggleDoneType,
+  UpdateTaskDescriptionType,
+} from "../types/interfaces";
 
-const apiRoute = "http://localhost:3001/api";
+axios.defaults.baseURL = "http://localhost:3001/api";
 
-export const getTasks: GetTasks = async () => {
-  try {
-    const response = await axios.get(apiRoute + "/tasks");
-    return response.data;
-  } catch (e) {
-    apiFailed.fire();
-  }
-};
+export const getTasks: GetTasks = () =>
+  axios.get("/tasks").then((res) => res.data);
 
-export const postTask = async (newTask: string) => {
-  try {
-    const response = await axios.post(apiRoute + "/tasks", {
-      done: false,
-      description: newTask,
-    });
-    return response.data;
-  } catch (e) {
-    apiFailed.fire();
-  }
-};
+export const postTask: PostTaskType = (newTaskDescription: string) =>
+  axios
+    .post("/tasks", { description: newTaskDescription })
+    .then((res) => res.data);
 
-export const deleteTask = async (id: number) => {
-  try {
-    await axios.delete(apiRoute + `/tasks/${id}`);
-  } catch (e) {
-    apiFailed.fire();
-  }
-  return;
-};
+export const deleteTask: DeleteTaskType = (id: number) =>
+  axios.delete(`/tasks/${id}`);
 
-export const clearDone = async () => {
-  try {
-    await axios.delete(apiRoute + `/destroyChecked`);
-  } catch (e) {
-    apiFailed.fire();
-  }
-  return;
-};
+export const clearDone = () => axios.delete(`/destroyChecked`);
 
-export const allDone = async () => {
-  try {
-    await axios.put(apiRoute + `/checkAll`);
-  } catch (e) {
-    apiFailed.fire();
-  }
-  return;
-};
+export const allDone = () => axios.put(`/checkAll`);
 
-export const allUndone = async () => {
-  try {
-    await axios.put(apiRoute + `/uncheckAll`);
-  } catch (e) {
-    apiFailed.fire();
-  }
-  return;
-};
+export const allUndone = () => axios.put(`/uncheckAll`);
 
-export const done = async (id: number, done: boolean) => {
-  try {
-    await axios.put(apiRoute + `/tasks/${id}`, {
-      done: !done,
-    });
-  } catch (e) {
-    apiFailed.fire();
-  }
-  return;
-};
+export const toggleDone: ToggleDoneType = async (
+  id: number,
+  isDoneNow: boolean
+) =>
+  axios.put(`/tasks/${id}`, {
+    done: !isDoneNow,
+  });
 
-export const edit = async (id: number, newDesc: string) => {
-  try {
-    await axios.put(apiRoute + `/tasks/${id}`, {
-      description: newDesc,
-    });
-  } catch (e) {
-    apiFailed.fire();
-  }
-  return;
-};
+export const updateTaskDescription: UpdateTaskDescriptionType = (
+  id: number,
+  newDescription: string
+) =>
+  axios.put(`/tasks/${id}`, {
+    description: newDescription,
+  });

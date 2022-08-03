@@ -8,12 +8,14 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { newTaskOnEnterDown } from "../eventListeners/handlers";
-import { checkAllTasksHandler } from "../eventListeners/handlers";
 import { mainColor } from "../styles/colors";
 import { InputTaskProps } from "../types/interfaces";
-import { isTaskListEmpty } from "../utils/reusableFunctions";
 
-const InputTask = ({ tasks, setTasks }: InputTaskProps) => {
+const InputTask = ({
+  isTaskListEmpty,
+  onButtonCheckAll,
+  onNewTask,
+}: InputTaskProps) => {
   const [newTask, setNewTask] = useState("");
   const [isLargerThan400] = useMediaQuery("(min-width: 400px)");
   return (
@@ -29,11 +31,9 @@ const InputTask = ({ tasks, setTasks }: InputTaskProps) => {
             mt="2"
             ml="3"
             display={!isLargerThan400 ? "none" : "flex"}
-            hidden={isTaskListEmpty(tasks)}
+            hidden={isTaskListEmpty}
             icon={<CheckIcon />}
-            onClick={() => {
-              checkAllTasksHandler(tasks, setTasks);
-            }}
+            onClick={() => onButtonCheckAll()}
           />
         }
       />
@@ -53,7 +53,7 @@ const InputTask = ({ tasks, setTasks }: InputTaskProps) => {
           setNewTask(event.target.value);
         }}
         onKeyDown={(event) => {
-          newTaskOnEnterDown(event, newTask, tasks, setTasks, setNewTask);
+          newTaskOnEnterDown(event, newTask, setNewTask, onNewTask);
         }}
       />
     </InputGroup>

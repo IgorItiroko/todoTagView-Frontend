@@ -9,8 +9,6 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import {
-  deleteTaskHandler,
-  doneTaskHandler,
   submitTaskOnKeyDownHandler,
   submitEditOnBlurHandler,
 } from "../eventListeners/handlers";
@@ -18,7 +16,13 @@ import { CardProps } from "../types/interfaces";
 import { mainColor } from "../styles/colors";
 import { confirmDelete } from "../styles/sweetAlerts";
 
-const TaskCard = ({ tasks, task, index, setTasks }: CardProps) => {
+const TaskCard = ({
+  task,
+  index,
+  deleteTaskHandler,
+  onToggleDone,
+  onTaskUpdate,
+}: CardProps) => {
   const [isHovering, setIsHovering] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
   const [newTaskDescription, setNewTaskDescription] = useState("");
@@ -27,7 +31,7 @@ const TaskCard = ({ tasks, task, index, setTasks }: CardProps) => {
 
   useEffect(() => {
     setNewTaskDescription(task.description);
-  }, []);
+  }, [task.description]);
 
   return (
     <Flex
@@ -44,7 +48,7 @@ const TaskCard = ({ tasks, task, index, setTasks }: CardProps) => {
     >
       <IconButton
         onClick={() => {
-          doneTaskHandler(task.id, task.done, tasks, setTasks);
+          onToggleDone(task.id, task.done);
         }}
         aria-label="checkbox"
         size="sm"
@@ -63,10 +67,10 @@ const TaskCard = ({ tasks, task, index, setTasks }: CardProps) => {
             submitEditOnBlurHandler(
               task.id,
               newTaskDescription,
-              tasks,
-              setTasks,
               isEditable,
-              setIsEditable
+              setIsEditable,
+              onTaskUpdate,
+              deleteTaskHandler
             );
           }}
           onChange={(event) => {
@@ -77,10 +81,10 @@ const TaskCard = ({ tasks, task, index, setTasks }: CardProps) => {
               event,
               task.id,
               newTaskDescription,
-              tasks,
-              setTasks,
               isEditable,
-              setIsEditable
+              setIsEditable,
+              onTaskUpdate,
+              deleteTaskHandler
             );
           }}
           autoFocus
@@ -105,11 +109,11 @@ const TaskCard = ({ tasks, task, index, setTasks }: CardProps) => {
             if (!task.done) {
               confirmDelete.fire().then((result) => {
                 if (result.isConfirmed) {
-                  deleteTaskHandler(task.id, tasks, setTasks);
+                  deleteTaskHandler(task.id);
                 }
               });
             } else {
-              deleteTaskHandler(task.id, tasks, setTasks);
+              deleteTaskHandler(task.id);
             }
           }}
           icon={<DeleteIcon />}

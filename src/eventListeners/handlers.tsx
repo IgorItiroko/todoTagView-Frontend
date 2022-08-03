@@ -1,11 +1,8 @@
 import {
-  allDone,
-  allUndone,
   clearDone,
   deleteTask,
-  done,
-  edit,
-  postTask,
+  toggleDone,
+  updateTaskDescription,
 } from "../api/apiCalls";
 import { apiFailed } from "../styles/sweetAlerts";
 import {
@@ -14,40 +11,16 @@ import {
   TaskProps,
   SetTaskArrayType,
 } from "../types/interfaces";
-import { validateAllTasks } from "../utils/reusableFunctions";
 
-export const newTaskOnEnterDown = async (
+export const newTaskOnEnterDown = (
   event: { key: string },
   newTask: string,
-  tasks: TaskProps[],
-  setTasks: SetTaskArrayType,
-  setNewTask: SetStringType
+  setNewTask: SetStringType,
+  onNewTask: Function
 ) => {
-  try {
-    if (event.key === "Enter" && newTask !== "") {
-      const response = await postTask(newTask);
-      setTasks(tasks.concat(response));
-      setNewTask("");
-    }
-  } catch (e) {
-    apiFailed.fire();
-  }
-};
-
-export const checkAllTasksHandler = async (
-  tasks: TaskProps[],
-  setTasks: SetTaskArrayType
-) => {
-  try {
-    const isAllDone = validateAllTasks(tasks);
-    if (isAllDone) {
-      await allUndone();
-    } else {
-      await allDone();
-    }
-    setTasks(tasks.map((task: TaskProps) => ({ ...task, done: !isAllDone })));
-  } catch (e) {
-    apiFailed.fire();
+  if (event.key === "Enter" && newTask !== "") {
+    onNewTask(newTask);
+    setNewTask("");
   }
 };
 
@@ -64,99 +37,37 @@ export const deleteTaskHandler = async (
   }
 };
 
-export const doneTaskHandler = async (
-  id: number,
-  isDone: boolean,
-  tasks: TaskProps[],
-  setTasks: SetTaskArrayType
-) => {
-  try {
-    await done(id, isDone);
-    setTasks(
-      tasks.map((task: TaskProps) => {
-        if (task.id === id) {
-          return { ...task, done: !isDone };
-        } else {
-          return task;
-        }
-      })
-    );
-  } catch (e) {
-    apiFailed.fire();
-  }
-};
-
-export const clearDoneHandler = async (
-  tasks: TaskProps[],
-  setTasks: SetTaskArrayType
-) => {
-  try {
-    await clearDone();
-    setTasks(tasks.filter((value: { done: boolean }) => !value.done));
-  } catch (e) {
-    apiFailed.fire();
-  }
-};
-
 export const submitEditOnBlurHandler = async (
-  id: number,
+  taskId: number,
   newDescription: string,
-  tasks: TaskProps[],
-  setTasks: SetTaskArrayType,
   editable: boolean,
-  setEditable: SetBooleanType
+  setEditable: SetBooleanType,
+  onTaskUpdate: Function,
+  deleteTaskHandler: Function
 ) => {
-  try {
-    if (newDescription !== "") {
-      await edit(id, newDescription);
-      setEditable(!editable);
-      setTasks(
-        tasks.map((task: TaskProps) => {
-          if (task.id === id) {
-            return { ...task, description: newDescription };
-          } else {
-            return task;
-          }
-        })
-      );
-    } else {
-      await deleteTask(id);
-      setTasks(tasks.filter((value: { id: number }) => value.id !== id));
-    }
-  } catch (e) {
-    apiFailed.fire();
+  if (newDescription !== "") {
+    onTaskUpdate(taskId, newDescription);
+  } else {
+    deleteTaskHandler(taskId);
   }
+  setEditable(!editable);
 };
 
 export const submitTaskOnKeyDownHandler = async (
   event: { key: string },
-  id: number,
+  taskId: number,
   newDescription: string,
-  tasks: TaskProps[],
-  setTasks: SetTaskArrayType,
   editable: boolean,
-  setEditable: SetBooleanType
+  setEditable: SetBooleanType,
+  onTaskUpdate: Function,
+  deleteTaskHandler: Function
 ) => {
-  try {
-    if (event.key === "Enter") {
-      if (newDescription !== "") {
-        await edit(id, newDescription);
-        setEditable(!editable);
-        setTasks(
-          tasks.map((task: TaskProps) => {
-            if (task.id === id) {
-              return { ...task, description: newDescription };
-            } else {
-              return task;
-            }
-          })
-        );
-      } else {
-        await deleteTask(id);
-        setTasks(tasks.filter((value: { id: number }) => value.id !== id));
-      }
+  if (event.key === "Enter") {
+    if (newDescription !== "") {
+      onTaskUpdate(taskId, newDescription);
+    } else {
+      deleteTaskHandler(taskId);
     }
-  } catch (e) {
-    apiFailed.fire();
+    setEditable(!editable);
   }
 };

@@ -10,13 +10,18 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useMediaQuery } from "@chakra-ui/react";
-import { clearDoneHandler } from "../eventListeners/handlers";
 import { TabProps, TaskProps } from "../types/interfaces";
 import { fontColor } from "../styles/colors";
 import TaskCard from "./taskCard";
 import { isTaskListEmpty, leftTasks } from "../utils/reusableFunctions";
 
-const ChooseTab = ({ tasks, setTasks }: TabProps) => {
+const ChooseTab = ({
+  clearDoneHandler,
+  deleteTaskHandler,
+  onToggleDone,
+  onTaskUpdate,
+  tasks,
+}: TabProps) => {
   const [isLargerThan800] = useMediaQuery("(min-width: 800px)");
   return (
     <Tabs
@@ -24,7 +29,12 @@ const ChooseTab = ({ tasks, setTasks }: TabProps) => {
       colorScheme="gray"
       hidden={isTaskListEmpty(tasks)}
     >
-      <Flex justifyContent="flex-start" width="680px" hidden={!isLargerThan800}>
+      <Flex
+        justifyContent="flex-start"
+        alignItems="center"
+        width="680px"
+        hidden={!isLargerThan800}
+      >
         <TabList>
           <Tab>All</Tab>
           <Tab>Active</Tab>
@@ -33,24 +43,15 @@ const ChooseTab = ({ tasks, setTasks }: TabProps) => {
         <Spacer />
         <Button
           onClick={() => {
-            clearDoneHandler(tasks, setTasks);
+            clearDoneHandler();
           }}
           color={fontColor}
           variant="link"
-          height="2em"
-          pt="2"
         >
           Clear Completed
         </Button>
         <Spacer />
-        <Text
-          as="u"
-          height="2em"
-          pt="2"
-          size="md"
-          fontWeight="bold "
-          color={fontColor}
-        >
+        <Text as="u" size="md" fontWeight="bold " color={fontColor}>
           Items Left: {leftTasks(tasks)}
         </Text>
       </Flex>
@@ -64,10 +65,11 @@ const ChooseTab = ({ tasks, setTasks }: TabProps) => {
               return (
                 <TaskCard
                   key={index}
-                  tasks={tasks}
                   task={task}
                   index={index}
-                  setTasks={setTasks}
+                  deleteTaskHandler={deleteTaskHandler}
+                  onToggleDone={onToggleDone}
+                  onTaskUpdate={onTaskUpdate}
                 />
               );
             }
@@ -81,10 +83,11 @@ const ChooseTab = ({ tasks, setTasks }: TabProps) => {
               return (
                 <TaskCard
                   key={index}
-                  tasks={tasks}
                   task={task}
                   index={index}
-                  setTasks={setTasks}
+                  deleteTaskHandler={deleteTaskHandler}
+                  onToggleDone={onToggleDone}
+                  onTaskUpdate={onTaskUpdate}
                 />
               );
             })}
@@ -101,10 +104,11 @@ const ChooseTab = ({ tasks, setTasks }: TabProps) => {
                 return (
                   <TaskCard
                     key={index}
-                    tasks={tasks}
                     task={task}
                     index={index}
-                    setTasks={setTasks}
+                    deleteTaskHandler={deleteTaskHandler}
+                    onToggleDone={onToggleDone}
+                    onTaskUpdate={onTaskUpdate}
                   />
                 );
               }
