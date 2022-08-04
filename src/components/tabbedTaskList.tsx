@@ -13,9 +13,9 @@ import { useMediaQuery } from "@chakra-ui/react";
 import { TabProps, TaskProps } from "../types/interfaces";
 import { fontColor } from "../styles/colors";
 import TaskCard from "./taskCard";
-import { leftTasks } from "../utils/reusableFunctions";
+import { pendingTasksCount } from "../utils/reusableFunctions";
 
-const ChooseTab = ({
+const TabbedTaskList = ({
   clearDoneHandler,
   deleteTaskHandler,
   onToggleDone,
@@ -52,7 +52,7 @@ const ChooseTab = ({
         </Button>
         <Spacer />
         <Text as="u" size="md" fontWeight="bold " color={fontColor}>
-          Items Left: {leftTasks(tasks)}
+          Items Left: {pendingTasksCount(tasks)}
         </Text>
       </Flex>
       <TabPanels>
@@ -119,4 +119,4 @@ const ChooseTab = ({
   );
 };
 
-export default ChooseTab;
+export default TabbedTaskList;

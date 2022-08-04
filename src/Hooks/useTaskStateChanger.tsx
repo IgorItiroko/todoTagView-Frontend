@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-  allDone,
-  allUndone,
+  toggleAllDone as toggleAllTaskStatus,
   clearDone,
   deleteTask,
   getTasks,
@@ -19,18 +18,16 @@ import {
   FuncUpdateTasksDescription,
   TaskProps,
 } from "../types/interfaces";
-import { validateAllTasks } from "../utils/reusableFunctions";
+import { areAllTasksDone } from "../utils/reusableFunctions";
 
 export function useTaskStateChangers() {
   const [tasks, setTasks] = useState<Array<TaskProps>>([]);
 
-  const setNewTask = (newTask: TaskProps) => tasks.concat(newTask);
-  const setCheckAllTasks = (isAllDone: boolean) =>
-    tasks.map((task: TaskProps) => ({ ...task, done: !isAllDone }));
-
   const addTask: FuncAddTaskType = (newTaskDescription: string) => {
     postTask(newTaskDescription)
-      .then((response: TaskProps) => setTasks(setNewTask(response)))
+      .then((response: TaskProps) =>
+        setTasks((previousTasks) => previousTasks.concat(response))
+      )
       .catch(() => {
         apiFailed.fire();
       });
@@ -38,28 +35,15 @@ export function useTaskStateChangers() {
 
   const checkAllDoneTasks: FuncCheckAllDoneType = async () => {
     try {
-      const isAllDone = validateAllTasks(tasks);
-      const itWorked = isAllDone ? allUndone() : allDone();
-      if (await itWorked) setTasks(setCheckAllTasks(isAllDone));
+      const isAllDone = areAllTasksDone(tasks);
+      toggleAllTaskStatus(!isAllDone);
+      setTasks((previousTasks) =>
+        previousTasks.map((task: TaskProps) => ({ ...task, done: !isAllDone }))
+      );
     } catch (e) {
       apiFailed.fire();
     }
   };
-  const setToggleTask = (taskId: number, isDone: boolean) =>
-    tasks.map((task: TaskProps) =>
-      task.id === taskId ? { ...task, done: !isDone } : task
-    );
-
-  const setClearDone = () =>
-    tasks.filter((task: { done: boolean }) => !task.done);
-
-  const setDeletedTask = (taskId: number) =>
-    tasks.filter((task: { id: number }) => task.id !== taskId);
-
-  const setUpdatedTask = (taskId: number, newDescription: string) =>
-    tasks.map((task: TaskProps) =>
-      task.id === taskId ? { ...task, description: newDescription } : task
-    );
 
   const toggleTaskState: FuncToggleStateType = async (
     taskId: number,
@@ -67,7 +51,12 @@ export function useTaskStateChangers() {
   ) => {
     try {
       const itWorked = toggleDone(taskId, isDone);
-      if (await itWorked) setTasks(setToggleTask(taskId, isDone));
+      if (await itWorked)
+        setTasks((previousTasks) =>
+          previousTasks.map((task: TaskProps) =>
+            task.id === taskId ? { ...task, done: !isDone } : task
+          )
+        );
     } catch (e) {
       apiFailed.fire();
     }
@@ -76,7 +65,10 @@ export function useTaskStateChangers() {
   const clearDoneHandler: FuncClearDoneType = async () => {
     try {
       const itWorked = clearDone();
-      if (await itWorked) setTasks(setClearDone());
+      if (await itWorked)
+        setTasks((previousTasks) =>
+          previousTasks.filter((task: TaskProps) => !task.done)
+        );
     } catch (e) {
       apiFailed.fire();
     }
@@ -85,7 +77,10 @@ export function useTaskStateChangers() {
   const deleteTaskHandler: FuncDeleteType = async (taskId: number) => {
     try {
       const itWorked = deleteTask(taskId);
-      if (await itWorked) setTasks(setDeletedTask(taskId));
+      if (await itWorked)
+        setTasks((previousTasks) =>
+          previousTasks.filter((task: { id: number }) => task.id !== taskId)
+        );
     } catch (e) {
       apiFailed.fire();
     }
@@ -97,7 +92,12 @@ export function useTaskStateChangers() {
   ) => {
     try {
       const itWorked = updateTaskDescription(taskId, newDescription);
-      if (await itWorked) setTasks(setUpdatedTask(taskId, newDescription));
+      if (await itWorked)
+        setTasks((previousTasks) =>
+          previousTasks.map((task: TaskProps) =>
+            task.id === taskId ? { ...task, description: newDescription } : task
+          )
+        );
     } catch (e) {
       apiFailed.fire();
     }

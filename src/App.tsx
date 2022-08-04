@@ -1,7 +1,7 @@
 import { Divider, Flex, Text } from "@chakra-ui/react";
 import Footer from "./components/footer";
 import InputTask from "./components/inputTask";
-import ChooseTab from "./components/chooseTab";
+import TabbedTaskList from "./components/tabbedTaskList";
 import { mainColor } from "./styles/colors";
 import { useTaskStateChangers } from "./Hooks/useTaskStateChanger";
 
@@ -37,12 +37,12 @@ function App() {
           Todo List
         </Text>
         <InputTask
-          isTaskListEmpty={tasks.length === 0 ? true : false}
+          isTaskListEmpty={tasks.length === 0}
           onButtonCheckAll={checkAllDoneTasks}
           onNewTask={addTask}
         />
-        <Divider hidden={tasks.length === 0 ? true : false} mt="1em" mb="1em" />
-        <ChooseTab
+        <Divider hidden={tasks.length === 0} mt="1em" mb="1em" />
+        <TabbedTaskList
           clearDoneHandler={clearDoneHandler}
           deleteTaskHandler={deleteTaskHandler}
           onToggleDone={toggleTaskState}

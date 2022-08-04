@@ -22,14 +22,12 @@ export const deleteTask: DeleteTaskType = (id: number) =>
 
 export const clearDone = () => axios.delete(`/destroyChecked`);
 
-export const allDone = () => axios.put(`/checkAll`);
+export const toggleAllDone = (changeAllTo: boolean) =>
+  axios.put(`/toggleAllDone`, {
+    done: changeAllTo,
+  });
 
-export const allUndone = () => axios.put(`/uncheckAll`);
-
-export const toggleDone: ToggleDoneType = async (
-  id: number,
-  isDoneNow: boolean
-) =>
+export const toggleDone: ToggleDoneType = (id: number, isDoneNow: boolean) =>
   axios.put(`/tasks/${id}`, {
     done: !isDoneNow,
   });
